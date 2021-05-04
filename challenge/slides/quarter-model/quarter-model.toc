@@ -1,0 +1,2 @@
+\beamer@sectionintoc {1}{Simulate the model}{1}{0}{1}
+\beamer@sectionintoc {2}{Create animation}{1}{0}{2}

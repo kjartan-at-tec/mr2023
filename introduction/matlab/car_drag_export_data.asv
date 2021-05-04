@@ -1,0 +1,21 @@
+%% Creating data from simulation of car
+
+tt = out.simout.Time;
+dta = out.simout.Data;
+
+t = (0:0.1:1.9)';
+t2 = (0:0.01:1.9)';
+
+
+data = [];
+
+N = length(t2);
+for i=1:N
+    t_ = t2(i);
+    id = find(tt <= t_);
+    data = cat(1, data, cat(2, (i-1)/N*6, dta(id(end),:)));
+end
+
+dlmwrite('car-drag.dta', data, 'delimiter', ',')
+
+

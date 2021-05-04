@@ -1,0 +1,57 @@
+% arara: pdflatex
+% arara: pythontex: {python3: yes}
+% arara: pdflatex
+
+% pythontex: {options: ["--interpreter python:python3"]}
+
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{pythontex} % <--
+\usepackage{graphicx}
+
+\newcommand{\reverse}[1]{\py{"#1"[::-1]}}
+
+\begin{document}
+
+\py{2+2}
+
+\py{2*6+2}
+
+\reverse{Hei, jeg heter Kjartan}
+\reverse{Hola}
+
+\section{Test}
+\begin{pyblock}
+mytext = '$1 + 1 = {0}$'.format(1 + 1)
+
+import sys
+print(sys.version)
+
+\end{pyblock}
+
+\py{sys.version}
+
+%\end{document}
+
+\begin{pylabblock}
+rc('text', usetex=True)
+rc('font', family='serif')
+rc('font', size=10.0)
+rc('legend', fontsize=10.0)
+rc('font', weight='normal')
+x = linspace(0, 10)
+figure(figsize=(4, 2.5))
+plot(x, sin(x), label='$\sin(x)$')
+xlabel(r'$x\mathrm{-axis}$')
+ylabel(r'$y\mathrm{-axis}$')
+legend(loc='lower right')
+savefig('myplot.pdf', bbox_inches='tight')
+\end{pylabblock}
+
+\begin{center}
+\includegraphics{myplot.pdf}
+\end{center}
+
+
+\end{document}

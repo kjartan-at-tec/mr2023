@@ -1,0 +1,63 @@
+=>PYTHONTEX#pylab#default#default#0#block#####109#
+# Parameters From https://ctms.engin.umich.edu/CTMS/index.php?example=Suspension&section=SimulinkModeling
+M1 = 2500    # Sprung mass
+M2 = 320     # Unsprung mass
+b1 = 350     # Damping coeff
+b2 = 15020   # Damping coeff
+K1 = 80000   # Spring stiffness
+K2 = 500000  # Tire stiffness
+Zr = 0.2     # Road input
+
+# State space model
+from control import matlab as cm
+
+A = np.array([[0, 0.001, 0, 0],
+[-(b1*b2)/(M1*M2), 0, (b1/M1)*(b1/M1 + b1/M2 + b2/M2)-K1/M1, -b1/M1],
+[b2/M2, 0, -(b1/M1 + b1/M2 + b2/M2), 1],
+[K2/M2, 0, -(K1/M1 + K1/M2 + K2/M2), 0]])
+B = np.array([[0, 0],
+[1/M1, b1*b2/(M1*M2)],
+[0, -b2/M2],
+[(1/M2+1/M1), -K2/M2]])
+C = np.array([[1, 0, 0, 0],[0,0,1,0]])
+D = np.array([[0,0],[0,0]])
+
+ss_sys = cm.ss(A, B, C, D)
+
+# Input signal
+N = 60
+tend = 1
+tt = linspace(0, tend, 60)
+uw = zeros((2,N))
+uw[1,15:25] = Zr*sin(linspace(0,pi,10))
+
+yout, T, xout = cm.lsim(ss_sys, uw.T, tt)
+T.shape=(len(T),1)
+dta = np.transpose(np.vstack((np.ravel(T), xout[:,0], xout[:,2], uw[1,:])))
+np.savetxt('quarter_model.dta', dta, delimiter=',', fmt='%8.4f')
+print(dta.shape)
+=>PYTHONTEX:SETTINGS#
+version=0.17
+outputdir=pythontex-files-quarter-model
+workingdir=.
+workingdirset=false
+gobble=none
+rerun=default
+hashdependencies=default
+makestderr=false
+stderrfilename=full
+keeptemps=none
+pyfuture=default
+pyconfuture=none
+pygments=true
+pygglobal=:GLOBAL||
+fvextfile=-1
+pyconbanner=none
+pyconfilename=stdin
+depythontex=false
+pygfamily=py|python3|
+pygfamily=pycon|pycon|
+pygfamily=sympy|python3|
+pygfamily=sympycon|pycon|
+pygfamily=pylab|python3|
+pygfamily=pylabcon|pycon|

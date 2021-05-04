@@ -1,0 +1,155 @@
+\documentclass[dvisvgm,hypertex,aspectratio=169]{beamer}
+\usefonttheme{serif}
+
+%\usepackage[utf8]{inputenc}
+%\usepackage[T1]{fontenc}
+
+%\usepackage[draft]{animate}
+\usepackage[final]{animate}
+\usepackage{ifthen}
+
+
+\usepackage{pythontex} % <--
+\usepackage{graphicx}
+
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=1.16}
+\usetikzlibrary{calc}
+\usetikzlibrary{decorations.pathmorphing,patterns}
+\usepackage{amsmath}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PageDown, PageUp key event handling; navigation symbols
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[totpages]{zref}
+\usepackage{atbegshi}
+\usepackage{fontawesome}
+\setbeamertemplate{navigation symbols}{}
+\AtBeginShipout{%
+  \AtBeginShipoutAddToBox{%
+    \special{dvisvgm:raw
+      <defs>
+      <script type="text/javascript">
+      <![CDATA[
+        document.addEventListener('keydown', function(e){
+          if(e.key=='PageDown'){
+            \ifnum\thepage<\ztotpages
+              document.location.replace('\jobname-\the\numexpr\thepage+1\relax.svg');%
+            \fi
+          }else if(e.key=='PageUp'){
+            \ifnum\thepage>1
+            %document.location.replace('\jobname-\the\numexpr\thepage-1\relax.svg');%
+              document.location.replace('\jobname-\makeatletter\@anim@pad{2}{\thepage-1}\makeatother\relax.svg');%
+            \fi%
+          }
+        });
+      ]]>
+      </script>
+      </defs>
+    }%
+  }%
+  \AtBeginShipoutUpperLeftForeground{%
+    \raisebox{-\dimexpr\height+0.5ex\relax}[0pt][0pt]{\makebox[\paperwidth][r]{%
+      \normalsize\color{structure!40!}%
+      \ifnum\thepage>1%
+      \href{\jobname-\the\numexpr\thepage-1\relax.svg}{\faArrowLeft}%
+      \else%  
+        \textcolor{lightgray}{\faArrowLeft}%  
+      \fi\hspace{0.5ex}%
+      \ifnum\thepage<\ztotpages%
+      \href{\jobname-\the\numexpr\thepage+1\relax.svg}{\faArrowRight}%
+      \else%
+        \textcolor{lightgray}{\faArrowRight}%  
+      \fi%
+      \hspace{0.5ex}%
+    }}%
+  }%  
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% Define footer
+\usepackage{ccicons}
+
+\makeatletter
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+  %\begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    %\usebeamerfont{title in head/foot}\insertsubsection
+  %\end{beamercolorbox}%
+  %\begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+  %  \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+  %  \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+  %\end{beamercolorbox}}%
+  %\vskip0pt%
+  \begin{beamercolorbox}[wd=.92\paperwidth,ht=2.25ex,dp=1ex,right]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.08\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \ccbysa
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\author{\href{mailto:kjartan@tec.mx}{kjartan@tec.mx}}
+
+
+\begin{document}
+
+\section{Create animation}
+
+\IfFileExists{./pendulum.dta}{%
+\def\wheeldiam{3}
+\def\susplen{5}
+\def\massheight{2}
+\def\springelementsone{40}
+\def\springelementstwo{32}
+\pgfmathsetmacro{\dponelen}{(\susplen-\massheight)/1.8}
+\pgfplotstableread[col sep=comma]{quarter_model.dta}{\qtable}
+\begin{frame}[label=Q]{Quarter model}
+  \begin{center}
+    \begin{animateinline}[controls, loop,]{20}
+      \multiframe{120}{n=0+1}{
+        \pgfplotstablegetelem{\n}{1}\of\qtable
+        \pgfmathsetmacro{\yone}{\wheeldiam + \susplen + \pgfplotsretval}
+        \pgfplotstablegetelem{\n}{2}\of\qtable
+        \pgfmathsetmacro{\ytwo}{\wheeldiam + \pgfplotsretval}
+        \pgfplotstablegetelem{\n}{3}\of\qtable
+        \pgfmathsetmacro{\yroad}{0.6*\pgfplotsretval}
+        \pgfmathsetmacro{\xroad}{-\n*6/18}
+        \pgfmathsetmacro{\displone}{abs(\yone-\ytwo)-\massheight}
+        \pgfmathsetmacro{\springone}{abs(\yone-\ytwo)/\springelementsone}
+        \pgfmathsetmacro{\springtwo}{abs(\ytwo-\yroad)/\springelementstwo}
+        \begin{tikzpicture}[scale=0.5, transform shape]
+          \huge
+          \clip (-5, -2) rectangle (6.5, 11);
+          \begin{scope}[xshift=\xroad cm,]
+            \draw[thick] (-6 , -0.35) -- (6.6 ,-0.35) arc [start angle=130, end angle=50, radius = 1.8 cm] -- (20, -0.35) arc [start angle=230, end angle=310, radius=3.6cm] -- (60, -0.35);
+          \end{scope}
+          \node[circle, inner sep=2mm, draw] (wheel) at (0, \yroad) {};
+          \node[draw, red!80!black, thick, minimum height=\massheight cm, minimum width=4cm] (m1) at (0, \yone) {$m_1$};
+          \node[draw, orange!80!black, thick, minimum height=\massheight cm, minimum width=2cm] (m2) at (0, \ytwo) {$m_2$};
+          \draw[decoration={aspect=0.3, segment length=\springone cm, amplitude=1.5mm,coil},decorate] (m1.south) ++ (-0.4, 0) -- ++(0, -\displone);
+          \begin{scope}[shift={($(m1.south)+(0.4,0)$)}]
+            \dashpot{\dponelen}{\displone}
+          \end{scope}
+          \draw[decoration={aspect=0.3, segment length=\springtwo cm, amplitude=1.5mm,coil},decorate] (m2.south) -- (wheel); 
+
+        \end{tikzpicture}
+      }
+    \end{animateinline}
+  \end{center}
+\end{frame}
+}{}
+\end{document}
+
+

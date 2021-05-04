@@ -1,0 +1,97 @@
+\documentclass[dvisvgm,hypertex,aspectratio=169]{beamer}
+\usefonttheme{serif}
+
+\beamertemplatenavigationsymbolsempty
+
+%\usepackage[utf8]{inputenc}
+%\usepackage[T1]{fontenc}
+
+%\usepackage[draft]{animate}
+\usepackage[final]{animate}
+\usepackage{ifthen}
+
+
+\usepackage{pythontex} % <--
+\usepackage{graphicx}
+
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=1.16}
+\usetikzlibrary{calc}
+\usetikzlibrary{decorations.pathmorphing,patterns}
+\usepackage{amsmath}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% Define footer
+\usepackage{ccicons}
+
+\makeatletter
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+  %\begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    %\usebeamerfont{title in head/foot}\insertsubsection
+  %\end{beamercolorbox}%
+  %\begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+  %  \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+  %  \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+  %\end{beamercolorbox}}%
+  %\vskip0pt%
+  \begin{beamercolorbox}[wd=.92\paperwidth,ht=2.25ex,dp=1ex,right]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.08\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \ccbysa
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\author{\href{mailto:kjartan@tec.mx}{kjartan@tec.mx}}
+
+
+\begin{document}
+
+\section{Create animation}
+
+\IfFileExists{./pendulum.dta}{%
+\pgfplotstableread[col sep=comma]{pendulum.dta}{\qtable}
+\begin{frame}[label=Q]{Pendulum}
+  \begin{center}
+    \begin{animateinline}[autoplay, loop,]{20}
+      \multiframe{60}{n=0+1}{
+        \pgfplotstablegetelem{\n}{1}\of\qtable
+        \pgfmathsetmacro{\xx}{\pgfplotsretval}
+        \pgfplotstablegetelem{\n}{2}\of\qtable
+        \pgfmathsetmacro{\xdot}{\pgfplotsretval}
+        \begin{tikzpicture}[scale=1.0, transform shape]
+          %\clip (-5, -2) rectangle (6.5, 11);
+          \begin{axis}[%
+            width=5cm,
+            height=5cm,
+            axis lines=middle,
+            xmin=-2, xmax=2,
+            ymin=-4, ymax=4,
+            xtick=\empty,
+            ytick=\empty,
+            xlabel={$\theta$},
+            ylabel={$\dot{\theta}$},
+            ]
+          \addplot[blue!80!black, smooth] table[x index=1, y index=2] {\qtable};
+          \node[circle, orange!80, fill, draw, inner sep=1pt] at (axis cs: \xx, \xdot) {};
+        \end{axis}
+      \end{tikzpicture}
+    }
+  \end{animateinline}
+\end{center}
+\end{frame}
+}{}
+\end{document}
+
+

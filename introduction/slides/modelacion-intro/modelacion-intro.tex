@@ -71,19 +71,22 @@
 % ------------------------------------------------
 % Determine which slides to include
 \includeonlyframes{%
-%  A0,% Sistemas mecánicos y electricos
-%  A1,% Modelación es encontrar descripción matematica
-%  A1E,% Hummer animation. Free-body diagram
-%  A1S,% Hummer animation. Free-body diagram solution
-%  I1E,% Intuición
-%  I1S,% Intuición, solución
-%  M1,% Como modelar?
-%  M2,% Simplificar
-%  M3,% Modelo de masa puntal
-%M4,% Modelo de arrastre
-%M5E,% Respuesto de escalón
-%M6A,% Respuesta, animación
-%L1,% Linearización
+  I00,% Control
+  I01,% Control
+  A0,% Sistemas mecánicos
+  A1,% Modelación es encontrar descripción matematica
+  A1E,% Hummer animation. Free-body diagram
+  A1S,% Hummer animation. Free-body diagram solution
+  I1E,% Intuición
+  I1S,% Intuición, solución
+  M1,% Como modelar?
+  M2,% Simplificar
+  M3,% Modelo de masa puntal
+  M30,% Modelo de masa puntal
+M4,% Modelo de arrastre
+M5E,% Respuesto de escalón
+M6A,% Respuesta, animación
+L1,% Linearización
 L2A,% Linearización local
 %L2E,% Linearización cuatro alternativas. Cuál es mejor
 %M8,% Solución del sistema lineal
@@ -148,6 +151,26 @@ L2A,% Linearización local
 
 \maketitle
 
+\begin{frame}[label=I00]{Sistemas de control}
+
+  \begin{center}
+    \includegraphics[width=0.7\linewidth]{minchala-block-control.png}\\
+    {\tiny Fuente: Prof Ismael Minchala, Tec}
+  \end{center}
+\end{frame}
+
+
+\note{%
+}
+
+\begin{frame}[label=I01]{¿Por qué control?}
+  \begin{center}
+    \includegraphics[width=8cm]{pirelli.jpg}
+  \end{center}
+  
+\end{frame}
+
+
 
 \begin{frame}[label=A1]{Un sistema mecánico}
 
@@ -162,9 +185,9 @@ L2A,% Linearización local
 \note{%
 }
 
-\begin{frame}[label=I1]{Intuición para sistemas mecánicos}
+\begin{frame}[label=I1E]{Intuición para sistemas mecánicos}
 
-  Un coche va a velocidad constante en una autopista horizontal. En el instante $t=t_1$, el conductor pone la transmisión en 'N', desconectando el motor de las ruedas. Cuál de las siguientes graficas describe mejor la velocidad $v(t)=\dot{X}(t)$ del coche?
+  Un coche va a velocidad constante en una autopista horizontal. En el instante $t=t_1$, el conductor pone la transmisión en 'N', desconectando el motor de las ruedas. Cuál de las siguientes graficas describe mejor la velocidad $v(t)=\frac{d}{dt}X(t)$ del coche?
 
   \begin{center}
     \begin{tikzpicture}
@@ -248,32 +271,24 @@ L2A,% Linearización local
   \hummeranimation{1}
 
   \begin{center}
-    \includegraphics[height=4cm]{hummer-ev.jpg}
+    \includegraphics[height=2cm]{hummer-ev.jpg}
   \end{center}
   ¿Cómo \alert{modelar} este sistema?  Depende del \alert{propósito}: ¿Para qué necesitamos el modelo?
 \end{frame}
 
-\begin{frame}[label=M2]{Simplificar}
+\begin{frame}[label=M2]{Simplificación}
 
   \hummeranimation{0} % Just black box
 
-  \begin{center}
-    \begin{tikzpicture}
-      \node[] (hev) {\includegraphics[height=2cm]{hummer-ev.jpg}};
-      \node[draw, fill, right of=hev, node distance=2 cm, minimum height=0.3cm, minimum width=0.3cm] (pm) {};
-
-      \draw[thick, ->] (hev) to (pm);
-    \end{tikzpicture}
-  \end{center}
 \end{frame}
 
 \begin{frame}[label=M3]{Modelo de masa puntual}
 
-  La segunda ley de Newton: ``Masa por acceleración es igual a la suma de las fuerzas''
+  La segunda ley de Newton: ``La tasa de cambio del momentum es igual a la suma de las fuerzas''
   \[ \frac{d}{dt} (mv) = \sum_i F_i\]
   \begin{center}
-    \small 
-    \begin{tikzpicture}[scale=1.4, transform shape]
+    \footnotesize
+    \begin{tikzpicture}[scale=1.2, transform shape]
       \node[anchor=south,] at (1, 0) (hummer) {\includegraphics[width=15 mm]{hummer-ev.png}};
       \node[coordinate] (com) at ($ (hummer.center) + (0.15, 0) $) {};
       \node[coordinate] (wheels) at ($ (hummer.south) + (0, 0.16) $) {};
@@ -282,7 +297,7 @@ L2A,% Linearización local
       \draw[->, black!90, ] (-1, 0.16) -- (-1 , 3) node[left, pos=1] {$Y$};
       
       \draw[thick, green!70!black, ->] (com) -- ++(0, -2cm) node[right] {$F_g = mg$};
-      \draw[thick, orange!80!black, ->] (wheels) -- ++(0, 1.3cm) node[right] {$F_{n}$};
+      \draw[thick, orange!80!black, ->] (wheels) -- ++(0, 2cm) node[right] {$F_{n}$};
       \draw[thick, red!80!black, ->] (wheels) -- ++(2cm, 0) node[below] {$F_m$};
       \draw[thick, blue!80!black, <-] (hummer.east) -- ++(2cm, 0) node[above] {$F_d$};
 
@@ -295,12 +310,40 @@ L2A,% Linearización local
   \[ m\dot{v} = F_m - F_d\]
 \end{frame}
 
-% Masa puntual?
-\begin{frame}[label=M4]{Modelo de masa puntual}
-  \[ m\dot{v} = F_m - F_d\]
-  Modelo cuadratico del arrastre \(F_d = \sign(v)kv^2\).
+\begin{frame}[label=M30]{... y si va de Cuernavaca hacía Tres Marías...}
 
-\begin{center}
+  \begin{center}
+    \footnotesize
+    \begin{tikzpicture}[scale=1.2, transform shape, rotate=10]
+      \node[anchor=south,] at (1, 0) (hummer) {\includegraphics[width=15 mm]{hummer-ev.png}};
+      \node[coordinate] (com) at ($ (hummer.center) + (0.15, 0) $) {};
+      \node[coordinate] (wheels) at ($ (hummer.south) + (0, 0.16) $) {};
+      
+      \draw[->, black!90, semithick] (-1, 0.16) -- (9 , 0.16) node[below, pos=1] {$X$};
+      \draw[->, black!90, ] (-1, 0.16) -- (-1 , 3) node[left, pos=1] {$Y$};
+      
+      \draw[thick, green!70!black, ->, rotate=-10] (com) -- ++(0, -2cm) node[right] {$F_g = mg$};
+      \draw[thick, orange!80!black, ->] (wheels) -- ++(0, 2cm) node[right] {$F_{n}$};
+      \draw[thick, red!80!black, ->] (wheels) -- ++(2cm, 0) node[below] {$F_m$};
+      \draw[thick, blue!80!black, <-] (hummer.east) -- ++(2cm, 0) node[above] {$F_d$};
+
+    \end{tikzpicture}
+  \end{center}
+
+\end{frame}
+
+
+\begin{frame}[label=M4]{Modelo del arrastre}
+  \begin{columns}
+    \begin{column}{0.5\linewidth}
+      \[ m\dot{v} = F_m - F_d\]
+      Modelo cuadratico del arrastre \(F_d = \sign(v)kv^2\).
+
+      \[ m\dot{v} + \sign(v)kv^2 = F_m\]
+      \alert{Ecuación diferencial nonlineal}
+    \end{column}
+    \begin{column}{0.5\linewidth}
+    \begin{center}
     \begin{tikzpicture}
       \begin{axis}[
         axis lines = middle,
@@ -315,16 +358,17 @@ L2A,% Linearización local
       \end{axis}
     \end{tikzpicture}
   \end{center}
-  \[ m\dot{v} + \sign(v)kv^2 = F_m, \qquad \text{Ecuación diferencial nonlineal}\]
+\end{column}
+\end{columns}
 \end{frame}
 
  \pgfplotstableread[col sep=comma]{car-drag-60.dta}{\cardragtable}
 
 \begin{frame}[label=M5E]{Modelo de masa puntual}
 
-  \[ \dot{v} = \frac{1}{m}(F_m - \sign(v)kv^2)\]
+  \[ m\dot{v} = F_m - \sign(v)kv^2\]
 
-  Inicialmente a $t=0$ el coche está parado, y la fuerza del motor sube de 0 a $F_m$ y se queda constante. Cómo se comporta el sistema?
+  Inicialmente, el coche está parado. En el instante  $t=0$  la fuerza del motor sube imediatamente de $F_m=0$ a $F_m=F_0$ y se queda constante. Cómo se comporta el sistema?
 
     \begin{center}
     \begin{tikzpicture}
@@ -403,7 +447,7 @@ L2A,% Linearización local
 \end{frame}
 
 \begin{frame}[label=M6A]{Modelo de masa puntual}
-  \[ \dot{v} = \frac{1}{m}(F_m - \sign(v)kv^2) \]
+  \[ \dot{v} = \frac{1}{m}(F_0 - \sign(v)kv^2) \]
   \begin{center}
     \begin{animateinline}[]{20}
       \multiframe{60}{n=1+1}{
@@ -413,7 +457,7 @@ L2A,% Linearización local
           \begin{axis}[
             axis lines = middle,
             ytick={4},
-            yticklabels={$\frac{F_m}{m}$},
+            yticklabels={$\frac{F_0}{m}$},
             xtick=\empty,
             xlabel={$v$},
             ylabel={$\dot{v}$},
@@ -429,14 +473,14 @@ L2A,% Linearización local
 \end{center}
 \end{frame}
 
-\begin{frame}[label=L1]{Modelo del arrastre}
+\begin{frame}[label=L1]{Linealización del modelo de arrastre}
 
   \[ m\dot{v} = F_m - F_d\]
   Modelo del arrastre incluyendo resistencia a la rodadura \(F_d = \sign(v)(r + kv^2)\).
   \[ m\dot{v} = F_m -\sign(v)(r + kv^2)\]
   
 \begin{center}
-    \begin{tikzpicture}[scale=0.7
+    \begin{tikzpicture}[scale=0.7]
       \begin{axis}[
         axis lines = middle,
         ytick=\empty,
@@ -444,35 +488,42 @@ L2A,% Linearización local
         xlabel={$v$},
         ylabel={$F_d$},
         ]
-        
         \addplot [blue!80, domain=-4:4, samples=800] { sign(x)*(0.4 + x*x)};
-
       \end{axis}
     \end{tikzpicture}
   \end{center}
-  Problema: El diseño de un controlador de velocidad necesita un modelo \alert{lineal}. El modelo arriba es \alert{nonlineal}.
+  Problema: El diseño y análisis de un sistema de lazo cerrado necesita un modelo \alert{lineal}. El modelo arriba es \alert{nonlineal}.
 
 \end{frame}
 
 \begin{frame}[label=L2A]{Linealización}
+  \small
   \begin{columns}
-    \begin{column}{0.4\columnwidth}
+    \begin{column}{0.6\columnwidth}
       \begin{align*}
-        f(v) &= \sign(v)(r + kv^2) \\&= \begin{cases} r + kv^2, & v\ge 0\\-r-kv^2, & v<0 \end{cases}\\
-             &\approx f(v_0) + \frac{df}{dv}\big|_{v_0}(v - v_0)\\
+        F_d=f(v) &= \sign(v)(r + kv^2) \\&= \begin{cases} r + kv^2, & v\ge 0\\-r-kv^2, & v<0 \end{cases}\\
+             &\approx f(v_0) + \frac{df}{dv}\big|_{v_0}\underbrace{(v - v_0)}_y\\
         \frac{df}{dv} &= \begin{cases} 2kv, & v>0\\-2kv, & v<0\\\text{indefinido}, & v=0 \end{cases}
+      \end{align*}
+      Ecuación diferencial linealizado:
+      \begin{align*}
+        m\frac{d}{dt} v &= m\frac{d}{dt} (v_0 + y)\\ &= m\frac{d}{dt} y = F_m - F_d\\
+        &\approx F_m - f(v_0) - \frac{df}{dv}\Big|_{v=v_0} y
+        = -2kv_0y + \overbrace{\big(F_m - f(v_0)\big)}^u.
       \end{align*}
     \end{column}
 
-    \begin{column}{0.6\columnwidth}
+    \begin{column}{0.4\columnwidth}
     \begin{center}
     \begin{animateinline}[controls, palindrome]{2}
-      \multiframe{16}{n=-3.2+0.44}{
+      \multiframe{15}{n=-2.8+0.44}{
         \begin{tikzpicture}[scale=0.8]
         \pgfmathsetmacro{\vnull}{\n}
+        \pgfmathsetmacro{\Fnull}{sign(\vnull)*(0.4+\vnull*\vnull)}
           \begin{axis}[
             axis lines = middle,
-            ytick=\empty,
+            ytick={\Fnull},
+            yticklabels={$f(v_0)$},
             xtick={\vnull},
             xticklabels={$v_0$},
             xlabel={$v$},

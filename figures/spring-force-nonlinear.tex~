@@ -1,0 +1,22 @@
+\documentclass{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{pgf,tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.9}
+
+\begin{document}
+
+\begin{tikzpicture}[%
+  node distance=2cm,
+  block/.style={rectangle, draw, minimum width=14mm, minimum height=10mm},]
+  \begin{axis}[%
+    width=7cm,
+    height=6cm,
+    xlabel={deflection [cm]},
+    ylabel={Spring force [N]},
+    ]
+    addplot[orange!80!black, thick, no marks, smooth, domain=-3:6] {60/pow(6, 3) * pow(x, 3)};
+  \end{axis}
+\end{tikzpicture}
+\end{document}

@@ -11,7 +11,6 @@
     "beamer10"
     "animate"
     "ifthen"
-    "pythontex"
     "graphicx"
     "tikz"
     "pgfplots"

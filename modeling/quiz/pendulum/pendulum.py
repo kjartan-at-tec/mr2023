@@ -13,7 +13,7 @@ def dxdt(t, x):
     return xdot
 
 x0 = np.array([1.0, 0])
-sol = solve_ivp(dxdt, [0, 10], x0, t_eval=np.linspace(0,6, 60))
+sol = solve_ivp(dxdt, [0, 26], x0, t_eval=np.linspace(0, 18, 120))
 
 dta = np.transpose(np.vstack((np.ravel(sol.t), sol.y)))
 np.savetxt('./pendulum.dta', dta, delimiter=',', fmt='%8.4f')

@@ -1,0 +1,37 @@
+\documentclass{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{pgf,tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.9}
+
+\begin{document}
+  \pgfmathsetmacro{\kthree}{60/pow(6, 3)}
+  \pgfmathsetmacro{\kone}{20/6}
+  \pgfmathsetmacro{\xzero}{3}
+  \pgfmathsetmacro{\yzero}{\kone*\xzero + \kthree*pow(\xzero, 3)}
+  \pgfmathsetmacro{\kk}{\kone + 3*\kthree*pow(\xzero, 2)}
+  
+
+\begin{tikzpicture}[%
+  node distance=2cm,
+  block/.style={rectangle, draw, minimum width=14mm, minimum height=10mm},
+  ]
+  \begin{axis}[%
+    width=10cm,
+    height=8cm,
+    axis lines=middle,
+    xlabel={deflection [cm]},
+    ylabel={Spring force [N]},
+    grid=both,
+    ymin=-40,
+    ymax=70,
+    ytick={-30,-20,...,60},
+    xtick={-5,-4,...,6},
+    clip=false,
+    ]
+    \addplot [orange!80!black, thick, no marks, smooth, domain=-5:6, samples=100] {\kone* x +  \kthree*pow(x, 3)};
+    \addplot [blue!80!black, thick, no marks, smooth, domain=0:6, samples=10] {\yzero + \kk*(x-\xzero)} node[pos=0.8, pin=0:{$f = \yzero + \kk (x-\xzero)$}] {};
+  \end{axis}
+\end{tikzpicture}
+\end{document}

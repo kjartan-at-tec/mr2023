@@ -1,0 +1,35 @@
+import sympy as sy
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import solve_ivp
+
+R0 = 5e3
+B = 4e3
+T0 = 273
+T1 = T0+20
+
+As, Bs, Ts, T1s, ys, xs = sy.symbols('A, B, T, T1, y, x')
+Rs = As*sy.exp(Bs/Ts)
+dRdT = sy.diff(Rs, Ts)
+print(dRdT)
+
+A = R0*np.exp(-B/T0)
+A = 0.002
+
+dRdTp = dRdT.subs({As: A, Bs:B, Ts:T1})
+print(dRdTp)
+
+print('A = %f' %A)
+
+def Rf(T):
+    global A, B
+    return A*np.exp(B/T)
+
+
+print('R1 = %f' %Rf(T1))
+
+TT = np.linspace(273, 320, 60)
+plt.figure(figsize=(10,8))
+plt.plot(TT, Rf(TT))
+plt.show()
+

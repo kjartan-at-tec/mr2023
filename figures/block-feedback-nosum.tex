@@ -1,0 +1,27 @@
+\documentclass{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{pgf,tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.9}
+
+\begin{document}
+
+\begin{tikzpicture}[block/.style={rectangle, draw, minimum width=12mm, minimum height=10mm},
+  sumnode/.style={circle, draw, inner sep=1pt},
+  node distance=20mm]
+  \small 
+  \node[coordinate] (input) {};
+  \node[block, right of=input] (G) {$-G(s)$};
+  \node[sumnode, right of=G] (sum) {$\sum$};
+  \node[coordinate, right of=sum] (output) {};
+  \node[coordinate, above of=sum, node distance=12mm] (v) {};
+ 
+  \draw[->] (sum) -- node[coordinate, pos=0.5,] (meas) {} node[ very near end, above] {$y$} (output);
+  \draw[->] (meas) |- ++ (0, -12mm) -| (input) -- (G);
+  \draw[->] (v) -| node[very near start, left] {$v$} (sum);
+  \draw[->] (G) -- (sum);
+
+
+\end{tikzpicture}
+\end{document}

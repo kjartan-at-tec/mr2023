@@ -11,7 +11,7 @@
 \usepackage{ifthen}
 
 
-\usepackage{pythontex} % <--
+%\usepackage{pythontex} % <--
 \usepackage{graphicx}
 
 
@@ -62,15 +62,15 @@
 
 \IfFileExists{./pendulum.dta}{%
 \pgfplotstableread[col sep=comma]{pendulum.dta}{\qtable}
-\begin{frame}[label=Q]{Pendulum}
+\begin{frame}[label=Q]{Pendulum phase plane}
   \begin{center}
     \begin{animateinline}[autoplay, loop,]{20}
-      \multiframe{60}{n=0+1}{
+      \multiframe{120}{n=0+1}{
         \pgfplotstablegetelem{\n}{1}\of\qtable
         \pgfmathsetmacro{\xx}{\pgfplotsretval}
         \pgfplotstablegetelem{\n}{2}\of\qtable
         \pgfmathsetmacro{\xdot}{\pgfplotsretval}
-        \begin{tikzpicture}[scale=1.0, transform shape]
+        \begin{tikzpicture}[scale=1.4, transform shape]
           %\clip (-5, -2) rectangle (6.5, 11);
           \begin{axis}[%
             width=5cm,

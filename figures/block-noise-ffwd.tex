@@ -1,0 +1,31 @@
+\documentclass{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{pgf,tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.9}
+
+\begin{document}
+
+\begin{tikzpicture}[block/.style={rectangle, draw, minimum width=12mm, minimum height=10mm},
+  sumnode/.style={circle, draw, inner sep=1pt},
+  node distance=20mm]
+  \small 
+  \node[coordinate] (input) {};
+  \node[sumnode, right of=input] (sum) {$\sum$};
+  \node[block, right of=sum] (G) {$G(s)$};
+  \node[sumnode, right of=G] (sum2) {$\sum$};
+  \node[block, above of=G,]  (H) {$H(s)$};
+  \node[coordinate, right of=sum2] (output) {};
+  \node[coordinate, above of=sum2, node distance=30mm] (v) {};
+ 
+  \draw[->] (input) -- node[ very near start, above] {$u$} (sum);
+  \draw[->] (v) -- node[ very near start, left] {$v$} (sum2);
+  \draw[->] (v) |- node[ very near start, left] {} (H);
+  \draw[->] (H) -|  (sum);
+  \draw[->] (G) -- node[ very near start, above] {} (sum2);
+  \draw[->] (sum) -- node[ very near start, above] {} (G);
+  \draw[->] (sum2) -- node[ very near end, above] {$y$} (output);
+
+\end{tikzpicture}
+\end{document}

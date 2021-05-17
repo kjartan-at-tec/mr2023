@@ -1,0 +1,223 @@
+\documentclass[dvisvgm,hypertex,aspectratio=169]{beamer}
+\usefonttheme{serif}
+
+%\usepackage[draft]{animate}
+\usepackage[final]{animate}
+\usepackage{ifthen}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PageDown, PageUp key event handling; navigation symbols
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[totpages]{zref}
+\usepackage{atbegshi}
+\usepackage{fontawesome}
+\setbeamertemplate{navigation symbols}{}
+\AtBeginShipout{%
+  \AtBeginShipoutAddToBox{%
+    \special{dvisvgm:raw
+      <defs>
+      <script type="text/javascript">
+      <![CDATA[
+        document.addEventListener('keydown', function(e){
+          if(e.key=='PageDown'){
+            \ifnum\thepage<\ztotpages
+              document.location.replace('\jobname-\the\numexpr\thepage+1\relax.svg');%
+            \fi
+          }else if(e.key=='PageUp'){
+            \ifnum\thepage>1
+            %document.location.replace('\jobname-\the\numexpr\thepage-1\relax.svg');%
+              document.location.replace('\jobname-\makeatletter\@anim@pad{2}{\thepage-1}\makeatother\relax.svg');%
+            \fi%
+          }
+        });
+      ]]>
+      </script>
+      </defs>
+    }%
+  }%
+  \AtBeginShipoutUpperLeftForeground{%
+    \raisebox{-\dimexpr\height+0.5ex\relax}[0pt][0pt]{\makebox[\paperwidth][r]{%
+      \normalsize\color{structure!40!}%
+      \ifnum\thepage>1%
+      \href{\jobname-\the\numexpr\thepage-1\relax.svg}{\faArrowLeft}%
+      \else%  
+        \textcolor{lightgray}{\faArrowLeft}%  
+      \fi\hspace{0.5ex}%
+      \ifnum\thepage<\ztotpages%
+      \href{\jobname-\the\numexpr\thepage+1\relax.svg}{\faArrowRight}%
+      \else%
+        \textcolor{lightgray}{\faArrowRight}%  
+      \fi%
+      \hspace{0.5ex}%
+    }}%
+  }%  
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=1.16}
+\usetikzlibrary{calc}
+\usepackage{amsmath}
+\DeclareMathOperator{\sign}{sgn}
+
+
+\author{Kjartan Halvorsen}
+\date{2021-05-13}
+\title{Fundamentos matemáticos}
+
+% ------------------------------------------------
+% Determine which slides to include
+\includeonlyframes{%
+L2A,% Linearización local
+%I0,% Conceptos: ODE, Laplace, transfer fcn
+%Free-body diagram, Newton, circuitos, 
+%O1,% ODE - damped pendulum or mass-spring-damper?
+%02,% ODE - RC
+%L0,% Laplace
+%L01,% Laplace de derivative
+%L1,% Laplace sistema mecanico
+%L2,% Laplace sistema RC
+%T0,% Transfer fcn
+%T1,% Función de transferencia sistema mecanica
+%T2,% Función de transferencia sistema electrica
+%T3,% Polos y ceros
+}
+% ------------------------------------------------
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Define footer
+\usepackage{ccicons}
+
+\makeatletter
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+  %\begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    %\usebeamerfont{title in head/foot}\insertsubsection
+  %\end{beamercolorbox}%
+  %\begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+  %  \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+  %  \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+  %\end{beamercolorbox}}%
+  %\vskip0pt%
+  \begin{beamercolorbox}[wd=.92\paperwidth,ht=2.25ex,dp=1ex,right]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertauthor
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.08\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \ccbysa
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+\maketitle
+
+
+\begin{frame}[label=I0]{Conceptos}
+  \begin{itemize}
+  \item Ecuaciones diferenciales
+  \item Linealización
+  \item Transformada de Laplace
+  \item Función de transferencia
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[label=I1]{Repetición}
+\end{frame}
+
+
+\begin{frame}[label=M3]{Modelo de masa puntual}
+
+  La segunda ley de Newton: ``La tasa de cambio del momentum es igual a la suma de las fuerzas''
+  \[ \frac{d}{dt} (mv) = \sum_i F_i\]
+  \begin{center}
+    \footnotesize
+    \begin{tikzpicture}[scale=1.2, transform shape]
+      \node[anchor=south,] at (1, 0) (hummer) {\includegraphics[width=15 mm]{hummer-ev.png}};
+      \node[coordinate] (com) at ($ (hummer.center) + (0.15, 0) $) {};
+      \node[coordinate] (wheels) at ($ (hummer.south) + (0, 0.16) $) {};
+      
+      \draw[->, black!90, semithick] (-1, 0.16) -- (9 , 0.16) node[below, pos=1] {$X$};
+      \draw[->, black!90, ] (-1, 0.16) -- (-1 , 3) node[left, pos=1] {$Y$};
+      
+      \draw[thick, green!70!black, ->] (com) -- ++(0, -2cm) node[right] {$F_g = mg$};
+      \draw[thick, orange!80!black, ->] (wheels) -- ++(0, 2cm) node[right] {$F_{n}$};
+      \draw[thick, red!80!black, ->] (wheels) -- ++(2cm, 0) node[below] {$F_m$};
+      \draw[thick, blue!80!black, <-] (hummer.east) -- ++(2cm, 0) node[above] {$F_d$};
+
+    \end{tikzpicture}
+  \end{center}
+
+  No hay acceleración en la dirección $Y$ (equilibrio en las fuerzas perpendiculares al suelo)
+  \[ 0 = F_{n} - F_g \quad \Rightarrow \quad F_{n} = F_g = mg\]
+  En la dirección $X$:
+  \[ m\dot{v} = F_m - F_d\]
+\end{frame}
+
+  \begin{frame}[label=L2A]{Linealización}
+  \small
+  \begin{columns}
+    \begin{column}{0.6\columnwidth}
+      \begin{align*}
+        F_d=f(v) &= \sign(v)(r + kv^2) \\&= \begin{cases} r + kv^2, & v\ge 0\\-r-kv^2, & v<0 \end{cases}\\
+             &\approx f(v_0) + \frac{df}{dv}\big|_{v_0}\underbrace{(v - v_0)}_y\\
+        \frac{df}{dv} &= \begin{cases} 2kv, & v>0\\-2kv, & v<0\\\text{indefinido}, & v=0 \end{cases}
+      \end{align*}
+      Ecuación diferencial linealizado:
+      \begin{align*}
+        m\frac{d}{dt} v &= m\frac{d}{dt} (v_0 + y)\\ &= m\frac{d}{dt} y = F_m - F_d\\
+        &\approx F_m - f(v_0) - \frac{df}{dv}\Big|_{v=v_0} y
+        = -2kv_0y + \overbrace{\big(F_m - f(v_0)\big)}^u.
+      \end{align*}
+    \end{column}
+
+    \begin{column}{0.4\columnwidth}
+    \begin{center}
+    \begin{animateinline}[controls, palindrome]{2}
+      \multiframe{15}{n=-2.8+0.44}{
+        \begin{tikzpicture}[scale=0.8]
+        \pgfmathsetmacro{\vnull}{\n}
+        \pgfmathsetmacro{\Fnull}{sign(\vnull)*(0.4+\vnull*\vnull)}
+          \begin{axis}[
+            axis lines = middle,
+            ytick={\Fnull},
+            yticklabels={$f(v_0)$},
+            xtick={\vnull},
+            xticklabels={$v_0$},
+            xlabel={$v$},
+            ylabel={$F_d$},
+            clip=false,
+            xmin=-6,
+            xmax=6,
+            ymin=-20,
+            ymax=20,
+            ]
+           
+            \addplot [blue!80, domain=-4:4, samples=400, thick] { sign(x)*(0.4 + x*x)};
+            %\addplot [orange!80, domain=-1.5:1.5, samples=4, variable=\t] ({t}, {t});
+            \addplot [orange!80, domain=-1.5:1.5, samples=4, variable=\t, thick] ({t+\vnull}, {sign(\vnull)*(0.4 + pow(\vnull, 2)) + (2*abs(\vnull))*t} );
+          \end{axis}
+        \end{tikzpicture}
+      }
+    \end{animateinline}
+  \end{center}
+\end{column} 
+\end{columns}
+\end{frame}
+
+\note{%
+  1) Definir el punto de operación v0. Alrededer del punto de operación, la función se puede approximar con una linea recta. 
+  2) Definir el variable de desviación. v = v0 + y   <=> y = v-v0
+  3) Determinar el serie de Taylor alrededor del punto de operación v0, unicamente el termino constante y el termino lineal.
+  4) Substituir la aproximación lineal en la ED original. 
+}
+
+

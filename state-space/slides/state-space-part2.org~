@@ -1,0 +1,197 @@
+#+OPTIONS: toc:nil
+# #+LaTeX_CLASS: koma-article 
+
+#+LATEX_CLASS: beamer
+#+LATEX_CLASS_OPTIONS: [presentation,aspectratio=169]
+#+OPTIONS: H:2
+
+#+LaTex_HEADER: \usepackage{khpreamble}
+#+LaTex_HEADER: \usepackage{amssymb}
+#+LaTex_HEADER: \usepgfplotslibrary{groupplots}
+
+#+LaTex_HEADER: \newcommand*{\shift}{\operatorname{q}}
+#+LaTex_HEADER: \DeclareMathSymbol{\Omega}{\mathalpha}{letters}{"0A}% italics
+#+LaTex_HEADER: \DeclareMathSymbol{\varOmega}{\mathalpha}{operators}{"0A}% upright
+#+LaTex_HEADER: \providecommand*{\upOmega}{\varOmega}% for siunitx
+#+LaTex_HEADER: \usepackage[binary-units=true]{siunitx}
+#+LaTex_HEADER: \usepackage{circuitikz}
+#+LaTex_HEADER: \usetikzlibrary{calc}
+
+
+#+title: Espacio de estados
+#+author: Kjartan Halvorsen
+#+date: 2021-05-24
+
+* What do I want the students to understand?			   :noexport:
+  - Equivalent circuit
+  - How to set up state space equations from ODE
+    
+* Which activities will the students do?			   :noexport:
+  - Fill in the blanks
+  - Exercises on Canvas
+* El motor electrico de corriente continua
+** El motor eléctrico de corriente directa
+   #+begin_export latex
+   \begin{center}
+   \includegraphics[height=0.6\textheight]{../../figures/wiki-small-dc-motor.jpg}
+   \includegraphics[width=0.6\textheight]{../../figures/Siemens-DC-prop.png}\\
+   {\footnotesize Fuente: Wikipedia \hspace*{3cm} Fuente: Siemens AG}
+   \end{center}
+   #+end_export
+
+** El motor eléctrico de corriente directa
+   #+begin_export latex
+   \begin{center}
+   \includegraphics[width=0.4\linewidth]{../../figures/HD-fig3_1.png}
+   \includegraphics[width=0.53\linewidth]{../../figures/HD-fig3_2.png}
+   {\footnotesize Funte: Hughes and Drury}
+   \end{center}
+   #+end_export
+   
+
+   
+** Las dos ecuaciónes del motor eléctrica CD
+
+*** Torque generado por la corriente del rotor en el campo magnético
+   \[ T_m(t) = k i(t) \]
+
+*** Voltaje generado por el movimiento del rotor en el campo magnético
+   \[ e(t) = k \omega(t)\]
+   \(e(t)\) se llama /Fuerza contraelectromotriz/ o /Back electro-motive force (Back e.m.f.)/ en inglés.
+
+   
+** Circuito equivalente
+
+   #+begin_export latex
+      \begin{center}
+	\begin{circuitikz}[scale=0.7, transform shape]
+	  \draw (4,1) node[elmech](motor){M};
+	  \draw (motor.north) to[R=$R$] (4,4) to[L=$L$] (0,4)
+	  to[american voltage source, label=$V$] (0,0) -| (motor.south);
+	  \draw[thick,->>](motor.right)--++(1,0)node[midway,above]{$\omega$};
+
+	  \node[] at (2, -0.8 cm) {\(L \frac{d}{dt}i(t) +  Ri(t) + k\omega(t) = V\)};
+
+	  \begin{scope}[xshift=8cm]
+	  \draw (4,1) node[elmech](motor){M};
+	  \draw (motor.north) to[R=$R$] (4,4) to[short] (0,4)
+	  to[american voltage source, label=$V$] (0,0) -| (motor.south);
+	  \draw[ thick, ->>](motor.right)--++(1,0)node[midway,above]{$\omega$};
+	  \node[] at (2, -0.8 cm) {\(Ri(t) + k\omega(t) = V\)};
+	  \end{scope}
+
+	  \begin{scope}[xshift=6cm, yshift=-2cm]
+	  \node {Newton: \( J\frac{d}{dt}\omega(t) = ki(t) - b\omega(t) + T_l(t)\)};
+	  \end{scope}
+	  
+	\end{circuitikz}
+      \end{center}
+   #+end_export
+
+** El modelo en espacio de estados
+
+*** Graphs
+   :PROPERTIES:
+   :beamer_col: 0.4
+   :END:
+
+   #+begin_export latex
+      \begin{center}
+	\begin{circuitikz}[scale=0.7, transform shape]
+	  \draw (4,1) node[elmech](motor){M};
+	  \draw (motor.north) to[R=$R$] (4,4) to[L=$L$] (0,4)
+	  to[american voltage source, label=$V$] (0,0) -| (motor.south);
+	  \draw[ultra thick, ](motor.right)--++(1,0)node[midway,above]{$\omega$};
+	  \draw (motor.right) ++(1,-0.6) rectangle ++(1, 1.2);
+	  \draw[->] (motor.right) ++(2.1, 0.6) arc [start angle=10, end angle=-10, radius=4cm] node[right] {$T_l$}; 
+	  \node at ($(motor.right) + (1.5, 0) $) {$J$, $b$};
+	  \node[] at (2, -0.8 cm) {Kirchoff: \(L \frac{d}{dt}i(t) +  Ri(t) + k\omega(t) = V\)};
+	  \node at (2, -2) {Newton: \( J\frac{d}{dt}\omega(t) = ki(t) - b\omega(t) + T_l(t)\)};
+	\end{circuitikz}
+      \end{center}
+   #+end_export
+
+*** Math
+   :PROPERTIES:
+   :beamer_col: 0.6
+   :END:
+
+   - Vector de estados :: \( x = \begin{bmatrix} x_1 \\x_2 \end{bmatrix} = \begin{bmatrix} Li \\J\omega \end{bmatrix}\)
+   - Vector de entradas :: \( u =  \begin{bmatrix} u_1 \\ u_2 \end{bmatrix} = \begin{bmatrix} V\\ T_l \end{bmatrix}\)
+   - Vector de salidas :: \( y =  \begin{bmatrix}\omega\\ i \end{bmatrix}\)
+
+   \begin{align*}
+     \dot{x}_1 &= \dot{(Li)} = -Ri -k\omega + V = -\frac{R}{L}(Li) -\frac{k}{J}(J\omega)  + V\\
+                &= - \frac{R}{L}x_1 - \frac{k}{J}x_2 + u_1\\
+     \dot{x}_2 &= \dot{(J\omega)} = ki -b\omega + T_l = \frac{k}{L}(Li) - \frac{b}{J}(J\omega) + T_l\\
+               &=  \frac{k}{L}x_1 - \frac{b}{J}x_2 + u_2
+   \end{align*}
+   
+
+
+** El modelo en espacio de estados
+
+*** Graphs
+   :PROPERTIES:
+   :beamer_col: 0.4
+   :END:
+
+   - Vector de estados :: \( x = \begin{bmatrix} x_1 \\x_2 \end{bmatrix} = \begin{bmatrix} Li \\J\omega \end{bmatrix}\)
+   - Vector de entradas :: \( u =  \begin{bmatrix} u_1 \\ u_2 \end{bmatrix} = \begin{bmatrix} V\\ T_l \end{bmatrix}\)
+   - Vector de salidas :: \( y =  \begin{bmatrix}\omega\\ i \end{bmatrix}\)
+
+
+
+*** Math
+   :PROPERTIES:
+   :beamer_col: 0.6
+   :END:
+   \begin{align*}
+     \dot{x}_1  &= - \frac{R}{L}x_1 - \frac{k}{J}x_2 + u_1\\
+     \dot{x}_2  &=  \frac{k}{L}x_1 - \frac{b}{J}x_2 + u_2
+   \end{align*}
+
+   \Large
+   \begin{align*}
+     \dot{x} &= \overbrace{\begin{bmatrix} \textcolor{white}{-\frac{R}{L}}  & \textcolor{white}{-\frac{k}{J}}\\
+                 \textcolor{\frac{k}{L}}  & \textcolor{white}{-\frac{b}{J}}\end{bmatrix}}^A \begin{bmatrix} {x_1}\\ {x_2}\end{bmatrix}  + \overbrace{\begin{bmatrix} \textcolor{white}{1} & \textcolor{white}{0}\\ \textcolor{white}{0} & \textcolor{white}{0} \end{bmatrix}}^B \begin{bmatrix} u_1\\ u_2\end{bmatrix} \\
+          y &= \begin{bmatrix} y_1\\ y_2\end{bmatrix} =  \underbrace{\begin{bmatrix} \textcolor{white}{0} &  \textcolor{white}{\frac{1}{J}}\\ \textcolor{white}{\frac{1}{L}} & \textcolor{white}{0} \end{bmatrix}}_C \begin{bmatrix} x_1\\ x_2\end{bmatrix}
+   \end{align*}
+
+
+** El modelo en espacio de estados
+
+*** Graphs
+   :PROPERTIES:
+   :beamer_col: 0.4
+   :END:
+
+   - Vector de estados :: \( x = \begin{bmatrix} x_1 \\x_2 \end{bmatrix} = \begin{bmatrix} Li \\J\omega \end{bmatrix}\)
+   - Vector de entradas :: \( u =  \begin{bmatrix} u_1 \\ u_2 \end{bmatrix} = \begin{bmatrix} V\\ T_l \end{bmatrix}\)
+   - Vector de salidas :: \( y =  \begin{bmatrix}\omega\\ i \end{bmatrix}\)
+
+
+
+*** Math
+   :PROPERTIES:
+   :beamer_col: 0.6
+   :END:
+   \begin{align*}
+     \dot{x}_1  &= - \frac{R}{L}x_1 - \frac{k}{J}x_2 + u_1\\
+     \dot{x}_2  &=  \frac{k}{L}x_1 - \frac{b}{J}x_2 + u_2
+   \end{align*}
+
+   \Large
+   \begin{align*}
+     \dot{x} &= \overbrace{\begin{bmatrix} \textcolor{red!80!black}{-\frac{R}{L}}  & \textcolor{red!80!black}{-\frac{k}{J}}\\
+                 \textcolor{red!80!black}{\frac{k}{L}}  & \textcolor{red!80!black}{-\frac{b}{J}}\end{bmatrix}}^A \begin{bmatrix} {x_1}\\ {x_2}\end{bmatrix}  + \overbrace{\begin{bmatrix} \textcolor{red!80!black}{1} & \textcolor{red!80!black}{0}\\ \textcolor{red!80!black}{0} & \textcolor{red!80!black}{0} \end{bmatrix}}^B \begin{bmatrix} u_1\\ u_2\end{bmatrix} \\
+          y &= \begin{bmatrix} y_1\\ y_2\end{bmatrix} =  \underbrace{\begin{bmatrix} \textcolor{red!80!black}{0} &  \textcolor{red!80!black}{\frac{1}{J}}\\ \textcolor{red!80!black}{\frac{1}{L}} & \textcolor{red!80!black}{0} \end{bmatrix}}_C \begin{bmatrix} x_1\\ x_2\end{bmatrix}
+   \end{align*}
+   
+
+
+** Espacio de estados
+   #+begin_center
+   \includegraphics[width=0.6\linewidth]{../../figures/Typical_State_Space_model.png}\\
+   \footnotesize Fuente: Wikipedia
+   #+end_center

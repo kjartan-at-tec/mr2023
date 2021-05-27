@@ -11,6 +11,7 @@
     "beamer10"
     "animate"
     "ifthen"
+    "khpreamble"
     "zref"
     "atbegshi"
     "fontawesome"
@@ -24,6 +25,11 @@
     "sign"
     "velocity"
     "startbrake"
-    "braketimeconst"))
+    "braketimeconst")
+   (LaTeX-add-labels
+    "eq:one"
+    "eq:two")
+   (LaTeX-add-environments
+    '("exercise" LaTeX-env-args ["argument"] 0)))
  :latex)
 

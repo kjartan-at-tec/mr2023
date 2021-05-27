@@ -23,3 +23,10 @@ T = m/(v0*2*k)
 K = 1/(v0*2*k)
 
 f0 = r + k*v0^2
+
+% step of 0 to 100
+vnonlin = 23.49;
+vlin = 23.54;
+ynonlin = vnonlin - 22;
+ylin = vlin - 22;
+e100 = (ylin-ynonlin)/ynonlin * 100

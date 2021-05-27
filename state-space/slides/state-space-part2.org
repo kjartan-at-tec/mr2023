@@ -1,0 +1,183 @@
+#+OPTIONS: toc:nil
+# #+LaTeX_CLASS: koma-article 
+
+#+LATEX_CLASS: beamer
+#+LATEX_CLASS_OPTIONS: [presentation,aspectratio=169]
+#+OPTIONS: H:2
+
+#+LaTex_HEADER: \usepackage{khpreamble}
+#+LaTex_HEADER: \usepackage{amssymb}
+#+LaTex_HEADER: \usepgfplotslibrary{groupplots}
+
+#+LaTex_HEADER: \newcommand*{\shift}{\operatorname{q}}
+#+LaTex_HEADER: \DeclareMathSymbol{\Omega}{\mathalpha}{letters}{"0A}% italics
+#+LaTex_HEADER: \DeclareMathSymbol{\varOmega}{\mathalpha}{operators}{"0A}% upright
+#+LaTex_HEADER: \providecommand*{\upOmega}{\varOmega}% for siunitx
+#+LaTex_HEADER: \usepackage[binary-units=true]{siunitx}
+#+LaTex_HEADER: \usepackage{circuitikz}
+#+LaTex_HEADER: \usetikzlibrary{calc}
+
+
+#+title: Espacio de estados  - solución homógena y estabilidad
+#+author: Kjartan Halvorsen
+#+date: 2021-05-27
+
+* What do I want the students to understand?			   :noexport:
+  - State space model from compartment model
+  - Characteristic equation
+  - Solution
+    
+* Which activities will the students do?			   :noexport:
+  - Fill in the blanks
+  - Exercises on Canvas
+
+* Modelo compartamental
+
+** Modelo compartimental
+   #+begin_export latex
+    \small
+   \begin{columns}
+     \begin{column}{0.5\linewidth}
+       \begin{center}
+	 \begin{tikzpicture}[scale=0.8, transform shape,
+	   compartment/.style={rounded corners=5mm, minimum height=14mm, minimum width=16mm},
+	   node distance=46mm,
+	   ]
+
+	   \node[compartment, draw=red, ] (comp1) {$V_1, c_1$};
+	   \node[compartment, right of=comp1, draw=olive,] (comp2) {$V_2, c_2$};
+
+	   \node[coordinate, above of=comp1, node distance=20mm] (input) {};
+	   \node[coordinate, below of=comp1, node distance=20mm] (output) {};
+
+	   \draw[->, double] (input) -- node[right]{$c_{i}Q_i$} (comp1);
+	   \draw[->, double] (comp1) -- node[right]{$c_{1}Q_o$} (output);
+	   \draw[<->, double] (comp1) -- node[above]{$(c_{2}-c_1)Q$} (comp2);
+
+	 \end{tikzpicture}
+       \end{center}
+
+     \end{column}
+     \begin{column}{0.5\linewidth}
+       \begin{equation*}
+	 \begin{aligned}
+	   V_1\frac{dc_1}{dt} &= Q(c_2-c_1) - Q_{o}c_1 + Q_ic_{i}, \quad  & c_1 \geq 0 \\
+	   V_2\frac{dc_2}{dt} &= Q(c_1-c_2),  & c_2 \geq 0,
+	 \end{aligned}
+       \end{equation*}
+     \end{column}
+   \end{columns}
+
+   \begin{center}
+   \Large
+   \begin{align*}
+     \dot{x} &= \overbrace{\begin{bmatrix} \textcolor{white}{-\frac{Q+Q_o}{V_1}}  & \textcolor{white}{\frac{Q}{V_1}}\\
+                 \textcolor{white}{\frac{Q}{V_2}}  & \textcolor{white}{-\frac{Q}{V_2}}\end{bmatrix}}^A \begin{bmatrix} {x_1}\\ {x_2}\end{bmatrix}  + \overbrace{\begin{bmatrix} \textcolor{white}{\frac{1}{V_1}} \\ \textcolor{white}{0} \end{bmatrix}}^B  u \\
+          y &=  \underbrace{\begin{bmatrix} \textcolor{white}{1} &  \textcolor{white}{0}\end{bmatrix}}_C \begin{bmatrix} x_1\\ x_2\end{bmatrix}
+   \end{align*}
+   
+   \end{center}
+   #+end_export
+
+** Modelo compartimental
+   #+begin_export latex
+    \small
+   \begin{columns}
+     \begin{column}{0.5\linewidth}
+       \begin{center}
+	 \begin{tikzpicture}[scale=0.8, transform shape,
+	   compartment/.style={rounded corners=5mm, minimum height=14mm, minimum width=16mm},
+	   node distance=46mm,
+	   ]
+
+	   \node[compartment, draw=red, ] (comp1) {$V_1, c_1$};
+	   \node[compartment, right of=comp1, draw=olive,] (comp2) {$V_2, c_2$};
+
+	   \node[coordinate, above of=comp1, node distance=20mm] (input) {};
+	   \node[coordinate, below of=comp1, node distance=20mm] (output) {};
+
+	   \draw[->, double] (input) -- node[right]{$c_{i}Q_i$} (comp1);
+	   \draw[->, double] (comp1) -- node[right]{$c_{1}Q_o$} (output);
+	   \draw[<->, double] (comp1) -- node[above]{$(c_{2}-c_1)Q$} (comp2);
+
+	 \end{tikzpicture}
+       \end{center}
+
+     \end{column}
+     \begin{column}{0.5\linewidth}
+       \begin{equation*}
+	 \begin{aligned}
+	   V_1\frac{dc_1}{dt} &= Q(c_2-c_1) - Q_{o}c_1 + Q_ic_{i}, \quad  & c_1 \geq 0 \\
+	   V_2\frac{dc_2}{dt} &= Q(c_1-c_2),  & c_2 \geq 0,
+	 \end{aligned}
+       \end{equation*}
+     \end{column}
+   \end{columns}
+
+   \begin{center}
+   \Large
+   \begin{align*}
+     \dot{x} &= \overbrace{\begin{bmatrix} \textcolor{red!80!black}{-\frac{Q+Q_o}{V_1}}  & \textcolor{red!80!black}{\frac{Q}{V_1}}\\
+                 \textcolor{red!80!black}{\frac{Q}{V_2}}  & \textcolor{red!80!black}{-\frac{Q}{V_2}}\end{bmatrix}}^A \begin{bmatrix} {x_1}\\ {x_2}\end{bmatrix}  + \overbrace{\begin{bmatrix} \textcolor{red!80!black}{\frac{1}{V_1}} \\ \textcolor{red!80!black}{0} \end{bmatrix}}^B  u \\
+          y &=  \underbrace{\begin{bmatrix} \textcolor{red!80!black}{1} &  \textcolor{red!80!black}{0}\end{bmatrix}}_C \begin{bmatrix} x_1\\ x_2\end{bmatrix}
+   \end{align*}
+   
+   \end{center}
+   #+end_export
+
+
+** Solución homógena de sistemas en espacio de estados
+\footnotesize
+   \[\dot{x} &= Ax\]
+
+   #+BEAMER: \pause
+
+*** Exponencial de una matriz
+   :PROPERTIES:
+   :beamer_col: 0.5
+   :beamer_env: block
+   :END:
+
+   Hay una función $\mathbb{R} \rightarrow \mathbb{R}^{n\times n}$ \[\Phi(t)=\mathrm{e}^{At} = I + tA + \frac{t^2}{2!}A^2 + \frac{t^3}{3!}A^3 + \cdots\] que tiene la propiedad
+   \[\dot{\Phi} = A\Phi, \quad \Phi(0) = I.\]
+
+   La solución homógena del sistema en espacio de estados es
+   \[ x(t) = \Phi(t)x(0)\]
+
+#+BEAMER: \pause
+
+*** Eigenvalores y eigenvectores
+   :PROPERTIES:
+   :beamer_col: 0.5
+   :beamer_env: block
+   :END:
+
+   Si el valor inicial $x(0) = v$ es un eigenvector de la matriz $A$
+   \[ Av = \lambda v,\]
+   \begin{align*}
+    x(t) &= \Phi(t) v = \mathrm{e}^{At}v\\ &= (I + tA + \frac{t^2}{2!}A^2 + \frac{t^3}{3!}A^3 + \cdots) v\\
+         &= Iv + tAv + \frac{t^2}{2!}A^2v + \frac{t^3}{3!}A^3v + \cdots\\ &= v + t\lambda v + \frac{(t\lambda)^2}{2!}v + \frac{(t\lambda)^3}{3!}v + \cdots\\
+         &= \mathrm{e}^{\lambda t} v 
+   \end{align*}
+   
+** Estabilidad
+
+   La estabilidad es una propiedad clave del sistema. No depende de la señal de entrada.
+   
+   La solución homógena se puede escribir
+   \[ x(t) = \mathrm{e}^{\lambda_1 t}\alpha_1v_1 + \mathrm{e}^{\lambda_2 t}\alpha_2v_2 + \cdots + \mathrm{e}^{\lambda_n t}\alpha_nv_n.\]
+
+   #+BEAMER: \pause
+
+   Estabilidad requiere que *cada una* de las funciones exponenciales va hacia cero.
+
+#+BEAMER: \pause
+
+#+begin_export latex
+   \begin{center}
+   Todos los eigenvalores de la matriz $A$ tienen que tener parte real negativa. \[ \mathrm{Re}\{\lambda_i\} < 0, \; \forall i=1,2,3\ldots, n\]
+   \end{center}
+   #+end_export
+
+Los eigenvalores de $A$ son los *polos* del sistema.
+   

@@ -1,0 +1,17 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[american,siunitx]{circuitikz}
+\usetikzlibrary{arrows,shapes,calc,positioning}
+
+    
+\begin{document}
+\begin{circuitikz}
+\draw (4,1) node[elmech](motor){M};
+\draw (motor.north) to[R=$R$] (4,4) to[L=$L$] (0,4)
+to[american voltage source, label=$V$] (0,0) -| (motor.south);
+\draw[thick,->>](motor.right)--++(1,0)node[midway,above]{$\omega$};
+ \end{circuitikz}
+\end{document}

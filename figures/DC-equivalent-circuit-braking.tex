@@ -1,0 +1,19 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[american,siunitx]{circuitikz}
+\usetikzlibrary{arrows,shapes,calc,positioning}
+
+    
+\begin{document}
+\begin{circuitikz}
+  \draw (6,1) node[elmech](motor){M};
+  \draw (2,4) node[spdt, rotate=180] (Sw) {};
+  \draw (motor.north) to[R=$R_A$] (6,4) to[L=$L_A$] (Sw.in);
+  \draw (Sw.out 2) to[short] ++(-2, 0) to[american voltage source, label=$V$] ++(0,-5) -| (motor.south);
+  \draw[thick,->>](motor.right)-- ++(1,0)node[midway,above]{$\omega$};
+  \draw (Sw.out 1) to[R=$R_B$] ++(0,-4.38);
+ \end{circuitikz}
+\end{document}

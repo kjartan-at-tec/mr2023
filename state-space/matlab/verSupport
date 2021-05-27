@@ -1,0 +1,20 @@
+ver -support
+-----------------------------------------------------------------------------------------------------
+MATLAB Version: 9.9.0.1570001 (R2020b) Update 4
+MATLAB License Number: 40613755
+Operating System: Linux 5.4.0-73-generic #82-Ubuntu SMP Wed Apr 14 17:39:42 UTC 2021 x86_64
+Java Version: Java 1.8.0_202-b08 with Oracle Corporation Java HotSpot(TM) 64-Bit Server VM mixed mode
+-----------------------------------------------------------------------------------------------------
+MATLAB                                                Version 9.9         (R2020b)      License 40613755
+Simulink                                              Version 10.2        (R2020b)      License 40613755
+Control System Toolbox                                Version 10.9        (R2020b)      License 40613755
+Global Optimization Toolbox                           Version 4.4         (R2020b)      License 40613755
+Optimization Toolbox                                  Version 9.0         (R2020b)      License 40613755
+Signal Processing Toolbox                             Version 8.5         (R2020b)      License 40613755
+Simscape                                              Version 5.0         (R2020b)      License 40613755
+Simscape Electrical                                   Version 7.4         (R2020b)      License 40613755
+Simscape Multibody                                    Version 7.2         (R2020b)      License 40613755
+Statistics and Machine Learning Toolbox               Version 12.0        (R2020b)      License 40613755
+Symbolic Math Toolbox                                 Version 8.6         (R2020b)      License 40613755
+System Identification Toolbox                         Version 9.13        (R2020b)      License 40613755
+diary off

@@ -18,4 +18,12 @@ Fmax = Tmax/rwheel
 vFmax = Pmax/Tmax % Max velocity at full torque
 
 % Operating point
-v0 = 
+v0 = 22;
+T = m/(v0*2*k)
+K = 1/(v0*2*k)
+
+f0 = r + k*v0^2
+
+% step of 0 to 100
+vnonlin = 2.349;
+vlin  

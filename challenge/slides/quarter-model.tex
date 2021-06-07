@@ -159,8 +159,8 @@
             \draw[thick] (-6 , -0.35) -- (6.6 ,-0.35) arc [start angle=130, end angle=50, radius = 1.8 cm] -- (20, -0.35) arc [start angle=230, end angle=310, radius=3.6cm] -- (60, -0.35);
           \end{scope}
           \node[circle, inner sep=2mm, draw] (wheel) at (0, \yroad) {};
-          \node[draw, red!80!black, thick, minimum height=\massheight cm, minimum width=4cm] (m1) at (0, \yone) {$m_1$};
-          \node[draw, orange!80!black, thick, minimum height=\massheight cm, minimum width=2cm] (m2) at (0, \ytwo) {$m_2$};
+          \node[draw, red!80!black, thick, minimum height=\massheight cm, minimum width=4cm] (m1) at (0, \yone) {$m_2$};
+          \node[draw, orange!80!black, thick, minimum height=\massheight cm, minimum width=2cm] (m2) at (0, \ytwo) {$m_1$};
           \draw[decoration={aspect=0.3, segment length=\springone cm, amplitude=1.5mm,coil},decorate] (m1.south) ++ (-0.4, 0) -- ++(0, -\displone);
           \begin{scope}[shift={($(m1.south)+(0.4,0)$)}]
             \dashpot{\dponelen}{\displone}

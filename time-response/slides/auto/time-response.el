@@ -1,10 +1,10 @@
 (TeX-add-style-hook
- "state-space-part2"
+ "time-response"
  (lambda ()
    (TeX-add-to-alist 'LaTeX-provided-class-options
-                     '(("beamer" "presentation" "aspectratio=169")))
+                     '(("beamer" "dvisvgm" "hypertex" "aspectratio=169")))
    (TeX-add-to-alist 'LaTeX-provided-package-options
-                     '(("inputenc" "utf8") ("fontenc" "T1") ("ulem" "normalem") ("siunitx" "binary-units=true")))
+                     '(("animate" "final") ("zref" "totpages")))
    (add-to-list 'LaTeX-verbatim-environments-local "semiverbatim")
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "path")
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "url")
@@ -18,30 +18,20 @@
     "latex2e"
     "beamer"
     "beamer10"
-    "inputenc"
-    "fontenc"
-    "graphicx"
-    "grffile"
-    "longtable"
-    "wrapfig"
-    "rotating"
-    "ulem"
+    "animate"
+    "ifthen"
+    "zref"
+    "atbegshi"
+    "fontawesome"
+    "tikz"
+    "pgfplots"
+    "pgfplotstable"
     "amsmath"
-    "textcomp"
-    "amssymb"
-    "capt-of"
-    "hyperref"
-    "khpreamble"
-    "siunitx"
-    "circuitikz")
+    "ccicons")
    (TeX-add-symbols
-    "shift"
-    "Omega"
-    "varOmega"
-    "upOmega")
-   (LaTeX-add-labels
-    "sec:org6c65e0f")
-   (LaTeX-add-environments
-    '("exercise" LaTeX-env-args ["argument"] 0)))
+    '("mexp" 1)
+    '("laplace" 1)
+    "snum"
+    "nframes"))
  :latex)
 

@@ -1,4 +1,4 @@
-% Created 2021-05-26 mié 17:54
+% Created 2021-05-26 mié 17:56
 % Intended LaTeX compiler: pdflatex
 \documentclass[presentation,aspectratio=169]{beamer}
 \usepackage[utf8]{inputenc}
@@ -40,9 +40,9 @@
 \maketitle
 
 \section{Modelo compartamental}
-\label{sec:orgf0ae405}
+\label{sec:org155ab6c}
 
-\begin{frame}[label={sec:org9b97fca}]{Modelo compartimental}
+\begin{frame}[label={sec:org7beba31}]{Modelo compartimental}
  \small
 \begin{columns}
   \begin{column}{0.5\linewidth}
@@ -87,7 +87,7 @@
 \end{center}
 \end{frame}
 
-\begin{frame}[label={sec:orga932488}]{Modelo compartimental}
+\begin{frame}[label={sec:org3f707e7}]{Modelo compartimental}
  \small
 \begin{columns}
   \begin{column}{0.5\linewidth}
@@ -133,7 +133,7 @@
 \end{frame}
 
 
-\begin{frame}[label={sec:org743ac63}]{Solución homógena de sistemas en espacio de estados}
+\begin{frame}[label={sec:org4fc00ac}]{Solución homógena de sistemas en espacio de estados}
 \footnotesize
    \[\dot{x} &= Ax\]
 
@@ -166,11 +166,14 @@ Si el valor inicial \(x(0) = v\) es un eigenvector de la matriz \(A\)
 \end{columns}
 \end{frame}
 
-\begin{frame}[label={sec:orge9be458}]{Estabilidad}
+\begin{frame}[label={sec:org6b006b6}]{Estabilidad}
 La estabilidad es una propiedad clave del sistema. No depende de la señal de entrada.
 
 La solución homógena se puede escribir
 \[ x(t) = \mathrm{e}^{\lambda_1 t}\alpha_1v_1 + \mathrm{e}^{\lambda_2 t}\alpha_2v_2 + \cdots + \mathrm{e}^{\lambda_n t}\alpha_nv_n.\]
+
+\pause
+
 Estabilidad requiere que \alert{cada una} de las funciones exponenciales va hacia cero
 
 \pause
@@ -178,6 +181,7 @@ Estabilidad requiere que \alert{cada una} de las funciones exponenciales va haci
 \begin{center}
 Todos los eigenvalores de la matriz $A$ tienen que tener parte real negativa. \[ \mathrm{Re}\{\lambda_i\} < 0, \; \forall i=1,2,3\ldots, n\]
 \end{center}
-Los eigenvalores de $A$ son los polos del sistema.
+
+Los eigenvalores de \(A\) son los \alert{polos} del sistema.
 \end{frame}
 \end{document}

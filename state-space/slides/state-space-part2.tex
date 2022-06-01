@@ -1,4 +1,4 @@
-% Created 2021-05-27 jue 11:21
+% Created 2022-05-29 Sun 21:43
 % Intended LaTeX compiler: pdflatex
 \documentclass[presentation,aspectratio=169]{beamer}
 \usepackage[utf8]{inputenc}
@@ -26,28 +26,28 @@
 \usetikzlibrary{calc}
 \usetheme{default}
 \author{Kjartan Halvorsen}
-\date{2021-05-27}
-\title{Espacio de estados  - solución homógena y estabilidad}
+\date{2022-05-30}
+\title{State-space models  - stability}
 \hypersetup{
  pdfauthor={Kjartan Halvorsen},
- pdftitle={Espacio de estados  - solución homógena y estabilidad},
+ pdftitle={State-space models  - stability},
  pdfkeywords={},
  pdfsubject={},
- pdfcreator={Emacs 26.3 (Org mode 9.4.4)}, 
+ pdfcreator={Emacs 26.3 (Org mode 9.4.6)}, 
  pdflang={English}}
 \begin{document}
 
 \maketitle
 
 \section{Modelo compartamental}
-\label{sec:org6c65e0f}
+\label{sec:org4236504}
 
-\begin{frame}[label={sec:org9d1e36f}]{Modelo compartimental}
+\begin{frame}[label={sec:org8b776f0}]{Compartment model}
  \small
 \begin{columns}
   \begin{column}{0.5\linewidth}
     \begin{center}
-      \begin{tikzpicture}[scale=0.8, transform shape,
+      \begin{tikzpicture}[scale=0.7, transform shape,
 	compartment/.style={rounded corners=5mm, minimum height=14mm, minimum width=16mm},
 	node distance=46mm,
 	]
@@ -87,12 +87,12 @@
 \end{center}
 \end{frame}
 
-\begin{frame}[label={sec:org9228a05}]{Modelo compartimental}
+\begin{frame}[label={sec:org6cb8f34}]{Compartment model}
  \small
 \begin{columns}
   \begin{column}{0.5\linewidth}
     \begin{center}
-      \begin{tikzpicture}[scale=0.8, transform shape,
+      \begin{tikzpicture}[scale=0.7, transform shape,
 	compartment/.style={rounded corners=5mm, minimum height=14mm, minimum width=16mm},
 	node distance=46mm,
 	]
@@ -133,7 +133,7 @@
 \end{frame}
 
 
-\begin{frame}[label={sec:org51fec36}]{Solución homógena de sistemas en espacio de estados}
+\begin{frame}[label={sec:org2134300}]{Homogeneous solution}
 \footnotesize
    \[\dot{x} &= Ax, \qquad x(0) = x_0\]
 
@@ -141,20 +141,22 @@
 
 \begin{columns}
 \begin{column}{0.5\columnwidth}
-\begin{block}{Exponencial de una matriz}
-Hay una función \(\mathbb{R} \rightarrow \mathbb{R}^{n\times n}\) \[\Phi(t)=\mathrm{e}^{At} = I + tA + \frac{t^2}{2!}A^2 + \frac{t^3}{3!}A^3 + \cdots\] que tiene la propiedad
+\begin{block}{The matrix exponential}
+There exists a function \(\Phi:\, \mathbb{R} \mapsto \mathbb{R}^{n\times n}\) \[\Phi(t)=\mathrm{e}^{At} = I + tA + \frac{t^2}{2!}A^2 + \frac{t^3}{3!}A^3 + \cdots\] that has the property
 \[\dot{\Phi} = A\Phi, \quad \Phi(0) = I.\]
 
-La solución homógena del sistema en espacio de estados es
-\[ x(t) = \Phi(t)x(0)\]
+\pause
+
+The homogeneous solution to the state-space model is
+   \[ x(t) = \Phi(t)x(0)\]
 
 \pause
 \end{block}
 \end{column}
 
 \begin{column}{0.5\columnwidth}
-\begin{block}{Eigenvalores y eigenvectores}
-Si el valor inicial \(x(0) = v\) es un eigenvector de la matriz \(A\)
+\begin{block}{Eigenvalues and eigenvectors}
+If the initial value \(x(0) = v\) is an eigenvector of the matrix \(A\)
 \[ Av = \lambda v,\]
 \begin{align*}
  x(t) &= \Phi(t) v = \mathrm{e}^{At}v\\ &= (I + tA + \frac{t^2}{2!}A^2 + \frac{t^3}{3!}A^3 + \cdots) v\\
@@ -166,22 +168,22 @@ Si el valor inicial \(x(0) = v\) es un eigenvector de la matriz \(A\)
 \end{columns}
 \end{frame}
 
-\begin{frame}[label={sec:org2243129}]{Estabilidad}
-La estabilidad es una propiedad clave del sistema. No depende de la señal de entrada.
+\begin{frame}[label={sec:orgd28113a}]{Stability}
+Stability is a key property of the system itself. It does not depend on the input signal.
 
-La solución homógena se puede escribir
-\[ x(t) = \mathrm{e}^{\lambda_1 t}\alpha_1v_1 + \mathrm{e}^{\lambda_2 t}\alpha_2v_2 + \cdots + \mathrm{e}^{\lambda_n t}\alpha_nv_n.\]
+The homogeneous solution can be written
+   \[ x(t) = \mathrm{e}^{\lambda_1 t}\alpha_1v_1 + \mathrm{e}^{\lambda_2 t}\alpha_2v_2 + \cdots + \mathrm{e}^{\lambda_n t}\alpha_nv_n.\]
 
 \pause
 
-Estabilidad requiere que \alert{cada una} de las funciones exponenciales va hacia cero.
+Stability requires that \alert{each} of the exponential functions go to zero.
 
 \pause
 
 \begin{center}
-Todos los eigenvalores de la matriz $A$ tienen que tener parte real negativa. \[ \mathrm{Re}\{\lambda_i\} < 0, \; \forall i=1,2,3\ldots, n\]
+A sufficient and necessary condition is that \emph{all} the eigenvalues of $A$ has negative real-part. \[ \mathrm{Re}\{\lambda_i\} < 0, \; \forall i=1,2,3\ldots, n\]
 \end{center}
 
-Los eigenvalores de \(A\) son los \alert{polos} del sistema.
+The eigenvalues of \(A\) are the \alert{poles} of the system.
 \end{frame}
 \end{document}

@@ -1,0 +1,41 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[american,siunitx]{circuitikz}
+\usetikzlibrary{arrows,shapes,calc,positioning}
+
+
+
+    
+\begin{document}
+  \begin{tikzpicture}[node distance=22mm, block/.style={rectangle, draw, minimum width=15mm, inner sep=4pt}, sumnode/.style={circle, draw, inner sep=2pt}]
+    
+    \node[coordinate] (input) {};
+    \node[sumnode, right of=input, node distance=16mm] (sumerr) {\tiny $\Sigma$};
+    \node[block, right of=sumerr, node distance=20mm] (fb)  {$F(s)$};
+    \node[sumnode, right of=fb, node distance=20mm] (sumff) {\tiny $\Sigma$};
+    \node[block, above of=sumff, node distance=14mm] (ff)  {$F_f(s)$};
+    \node[block, right of=sumff, node distance=20mm] (plant)  {$G(s)$};
+    \node[sumnode, right of=plant, node distance=16mm] (sumdist) {\tiny $\Sigma$};
+    \node[block, above of=sumdist, node distance=14mm] (H)  {$H(s)$};
+
+    \node[coordinate, above of=H, node distance=14mm] (disturbance) {};
+    \node[coordinate, right of=sumdist, node distance=20mm] (output) {};
+
+    \draw[->] (input) -- node[above, pos=0.3] {$r(t)$} (sumerr);
+    \draw[->] (sumerr) -- node[above] {$e(t)$} (fb);
+    \draw[->] (fb) -- node[above] {} (sumff);
+    \draw[->] (sumff) -- node[above] {$u(t)$} (plant);
+    \draw[->] (plant) -- node[above, near end] {} (sumdist);
+    \draw[->] (sumdist) -- node[coordinate] (meas) {} node[above, near end] {$y(t)$} (output);
+    \draw[->] (disturbance) -- node[right, pos=0.2] {$v(t)$} (H);
+    \draw[->] (disturbance) ++(0,-4mm) -| (ff);
+    \draw[->] (ff) -- (sumff);
+    \draw[->] (H) -- node[right, pos=0.2] {} (sumdist);
+    \draw[->] (meas) -- ++ (0,-14mm) -| node[right, pos=0.9] {-} (sumerr);
+  \end{tikzpicture}
+
+
+\end{document}

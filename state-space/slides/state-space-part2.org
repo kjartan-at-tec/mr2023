@@ -18,9 +18,9 @@
 #+LaTex_HEADER: \usetikzlibrary{calc}
 
 
-#+title: Espacio de estados  - solución homógena y estabilidad
+#+title: State-space models  - stability
 #+author: Kjartan Halvorsen
-#+date: 2021-05-27
+#+date: 2022-05-30
 
 * What do I want the students to understand?			   :noexport:
   - State space model from compartment model
@@ -33,13 +33,13 @@
 
 * Modelo compartamental
 
-** Modelo compartimental
+** Compartment model
    #+begin_export latex
     \small
    \begin{columns}
      \begin{column}{0.5\linewidth}
        \begin{center}
-	 \begin{tikzpicture}[scale=0.8, transform shape,
+	 \begin{tikzpicture}[scale=0.7, transform shape,
 	   compartment/.style={rounded corners=5mm, minimum height=14mm, minimum width=16mm},
 	   node distance=46mm,
 	   ]
@@ -79,13 +79,23 @@
    \end{center}
    #+end_export
 
-** Modelo compartimental
+*** Notes                                                          :noexport:
+
+- V1 is the volume of blood
+- V2 is the volume in the organ in which the substance is to have an effect.
+- The input signal is the product Qici, i.e. the mass of substance entering the blood.
+- The output signal is c1, the concentration in the blood.
+- The flows Q, Q0 are assumed constant.
+- The direction of flow between the two compartments depends on the sign of the difference in
+  concentration.
+ 
+** Compartment model
    #+begin_export latex
     \small
    \begin{columns}
      \begin{column}{0.5\linewidth}
        \begin{center}
-	 \begin{tikzpicture}[scale=0.8, transform shape,
+	 \begin{tikzpicture}[scale=0.7, transform shape,
 	   compartment/.style={rounded corners=5mm, minimum height=14mm, minimum width=16mm},
 	   node distance=46mm,
 	   ]
@@ -126,33 +136,35 @@
    #+end_export
 
 
-** Solución homógena de sistemas en espacio de estados
+** Homogeneous solution
 \footnotesize
    \[\dot{x} &= Ax, \qquad x(0) = x_0\]
 
    #+BEAMER: \pause
 
-*** Exponencial de una matriz
+*** The matrix exponential
    :PROPERTIES:
    :beamer_col: 0.5
    :beamer_env: block
    :END:
 
-   Hay una función $\mathbb{R} \rightarrow \mathbb{R}^{n\times n}$ \[\Phi(t)=\mathrm{e}^{At} = I + tA + \frac{t^2}{2!}A^2 + \frac{t^3}{3!}A^3 + \cdots\] que tiene la propiedad
+   There exists a function $\Phi:\, \mathbb{R} \mapsto \mathbb{R}^{n\times n}$ \[\Phi(t)=\mathrm{e}^{At} = I + tA + \frac{t^2}{2!}A^2 + \frac{t^3}{3!}A^3 + \cdots\] that has the property
    \[\dot{\Phi} = A\Phi, \quad \Phi(0) = I.\]
 
-   La solución homógena del sistema en espacio de estados es
+#+BEAMER: \pause
+
+The homogeneous solution to the state-space model is
    \[ x(t) = \Phi(t)x(0)\]
 
 #+BEAMER: \pause
 
-*** Eigenvalores y eigenvectores
+*** Eigenvalues and eigenvectors
    :PROPERTIES:
    :beamer_col: 0.5
    :beamer_env: block
    :END:
 
-   Si el valor inicial $x(0) = v$ es un eigenvector de la matriz $A$
+   If the initial value $x(0) = v$ is an eigenvector of the matrix $A$
    \[ Av = \lambda v,\]
    \begin{align*}
     x(t) &= \Phi(t) v = \mathrm{e}^{At}v\\ &= (I + tA + \frac{t^2}{2!}A^2 + \frac{t^3}{3!}A^3 + \cdots) v\\
@@ -160,24 +172,24 @@
          &= \mathrm{e}^{\lambda t} v 
    \end{align*}
    
-** Estabilidad
+** Stability
 
-   La estabilidad es una propiedad clave del sistema. No depende de la señal de entrada.
+   Stability is a key property of the system itself. It does not depend on the input signal.
    
-   La solución homógena se puede escribir
+The homogeneous solution can be written
    \[ x(t) = \mathrm{e}^{\lambda_1 t}\alpha_1v_1 + \mathrm{e}^{\lambda_2 t}\alpha_2v_2 + \cdots + \mathrm{e}^{\lambda_n t}\alpha_nv_n.\]
 
    #+BEAMER: \pause
 
-   Estabilidad requiere que *cada una* de las funciones exponenciales va hacia cero.
+Stability requires that *each* of the exponential functions go to zero.
 
 #+BEAMER: \pause
 
 #+begin_export latex
    \begin{center}
-   Todos los eigenvalores de la matriz $A$ tienen que tener parte real negativa. \[ \mathrm{Re}\{\lambda_i\} < 0, \; \forall i=1,2,3\ldots, n\]
+   A sufficient and necessary condition is that \emph{all} the eigenvalues of $A$ has negative real-part. \[ \mathrm{Re}\{\lambda_i\} < 0, \; \forall i=1,2,3\ldots, n\]
    \end{center}
    #+end_export
 
-Los eigenvalores de $A$ son los *polos* del sistema.
+The eigenvalues of $A$ are the *poles* of the system.
    

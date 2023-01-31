@@ -1,4 +1,4 @@
-% Created 2021-06-03 jue 12:15
+% Created 2023-01-19 Thu 13:26
 % Intended LaTeX compiler: pdflatex
 \documentclass[presentation,aspectratio=169]{beamer}
 \usepackage[utf8]{inputenc}
@@ -26,27 +26,44 @@
 \usetikzlibrary{calc}
 \usetheme{default}
 \author{Kjartan Halvorsen}
-\date{2021-06-03}
-\title{Espacio de estados  - polos, función de transferencia}
+\date{2022-06-02}
+\title{State-space models  - canonical forms, transfer function}
 \hypersetup{
  pdfauthor={Kjartan Halvorsen},
- pdftitle={Espacio de estados  - polos, función de transferencia},
+ pdftitle={State-space models  - canonical forms, transfer function},
  pdfkeywords={},
  pdfsubject={},
- pdfcreator={Emacs 26.3 (Org mode 9.4.4)}, 
+ pdfcreator={Emacs 26.3 (Org mode 9.4.6)}, 
  pdflang={English}}
 \begin{document}
 
 \maketitle
 
 \section{Mass-spring-damper, acceleration as output}
-\label{sec:org90cc8bb}
-\begin{frame}[label={sec:orgbb1aca3}]{Masa-resorte-amortiguador}
+\label{sec:org8d33a0e}
+\begin{frame}[label={sec:org8403af4}]{Mass-spring-damper}
 \begin{center}
 \includegraphics[width=0.2\linewidth]{../../figures/mass-spring-damper.png}
 \end{center}
 
-\(x = \begin{bmatrix} X & \dot{X} \end{bmatrix}\). La aceleración \(\ddot{X}\) como señal de salida.
+\(x = \begin{bmatrix} X & \dot{X} \end{bmatrix}\). We want the acceleration \(\ddot{X}\) to be the output signal.
+
+\begin{center}
+\Large
+\begin{align*}
+  \dot{x} &= \overbrace{\begin{bmatrix} \textcolor{white}{0} & \textcolor{white}{0}\\ \textcolor{white}{-\frac{k}{m}}  & \textcolor{white}{-\frac{c}{m}} \end{bmatrix}}^A x  + \overbrace{\begin{bmatrix} \textcolor{white}{0} \\ \textcolor{white}{\frac{1}{m}} \end{bmatrix}}^B  u \\
+       y &=  \underbrace{\begin{bmatrix} \textcolor{white}{-\frac{k}{m}}  & \textcolor{white}{-\frac{c}{m}} \end{bmatrix}}_C x + \underbrace{\begin{bmatrix} \textcolor{white}{\frac{1}{m}} \end{bmatrix}}_D u
+\end{align*}
+
+\end{center}
+\end{frame}
+
+\begin{frame}[label={sec:org8229fad}]{Mass-spring-damper}
+\begin{center}
+\includegraphics[width=0.2\linewidth]{../../figures/mass-spring-damper.png}
+\end{center}
+
+\(x = \begin{bmatrix} X & \dot{X} \end{bmatrix}\). We want the acceleration \(\ddot{X}\) to be the output signal.
 
 \begin{center}
 \Large
@@ -59,12 +76,12 @@
 \end{frame}
 
 
-\begin{frame}[label={sec:orgbeb5907}]{Masa-resorte-amortiguador}
+\begin{frame}[label={sec:orge2ef5d1}]{Mass-spring-damper}
 \begin{center}
 \includegraphics[width=0.2\linewidth]{../../figures/mass-spring-damper.png}
 \end{center}
 
-\(x = \begin{bmatrix} X & \dot{X} \end{bmatrix}\). La aceleración \(\ddot{X}\) como señal de salida.
+\(x = \begin{bmatrix} X & \dot{X} \end{bmatrix}\). We want the acceleration \(\ddot{X}\) to be the output signal.
 
 \begin{center}
 \Large
@@ -78,53 +95,61 @@
 
 
 \section{Canonical forms}
-\label{sec:org39f0f45}
+\label{sec:org1fb28da}
 
-\begin{frame}[label={sec:org7ff4df3}]{Formas canonicas}
+\begin{frame}[label={sec:org79a045b}]{Canonical forms}
 \begin{itemize}
-\item Forma controlable
-\item Forma observable
+\item Controllable form (a.k.a. reachable form)
+\item Observable form
 \end{itemize}
 
-\begin{block}{Recurso}
+\begin{block}{Reference}
 \href{https://lpsa.swarthmore.edu/Representations/SysRepTransformations/TF2SS.html}{https://lpsa.swarthmore.edu/Representations/SysRepTransformations/TF2SS.html}
 \end{block}
 \end{frame}
 
-\section{Estabilidad}
-\label{sec:orga469b44}
+\section{Stability}
+\label{sec:orga9f7467}
 
-\begin{frame}[label={sec:org4dcda55}]{Estabilidad}
-La solución homógena de \(\dot{x} = Ax\)  se puede escribir
-\[ x(t) = \mathrm{e}^{\lambda_1 t}\alpha_1v_1 + \mathrm{e}^{\lambda_2 t}\alpha_2v_2 + \cdots + \mathrm{e}^{\lambda_n t}\alpha_nv_n,\]
-donde \(\lambda_1\), \(\lambda_2\), \(\ldots\), \(\lambda_n\) son los \alert{eigenvalores} de \(A\). 
+\begin{frame}[label={sec:org2a1555a}]{Stability}
+Stability is a key property of the system itself. It does not depend on the input signal.
 
-Estabilidad requiere que \alert{cada una} de las funciones exponenciales va hacia cero.
-\[\Rightarrow \qquad \mathrm{Re}\{\lambda_i\} < 0, \; \forall i=1,2,3\ldots, n\]
+The homogeneous solution can be written
+   \[ x(t) = \mathrm{e}^{\lambda_1 t}\alpha_1v_1 + \mathrm{e}^{\lambda_2 t}\alpha_2v_2 + \cdots + \mathrm{e}^{\lambda_n t}\alpha_nv_n.\]
 
-Los eigenvalores de \(A\) son los \alert{polos} del sistema.
+\pause
+
+Stability requires that \alert{each} of the exponential functions go to zero.
+
+\pause
+
+\begin{center}
+A sufficient and necessary condition is that \emph{all} the eigenvalues of $A$ has negative real-part. \[ \mathrm{Re}\{\lambda_i\} < 0, \; \forall i=1,2,3\ldots, n\]
+\end{center}
+
+The eigenvalues of \(A\) are the \alert{poles} of the system.
 \end{frame}
 
-\begin{frame}[label={sec:orgcfd4fee}]{Los eigenvalores}
-\(\lambda\) y \(v\) es un par de eigenvalor y eigenvector de la matriz \(A\) si
+\begin{frame}[label={sec:org059eb60}]{The eigenvalues}
+\(\lambda\) and \(v\) is a pair of eigenvalue and eigenvector of the matrix \(A\) iff
 \[Av = \lambda v\]
 \pause
 \[ \lambda v - Av = 0\]
 \pause
 \[ (\lambda I - A)v = 0\]
 \pause
-Para que la ecuación tenga soluciones no-triviales
- \[ \det (\lambda I - A) = 0 \quad \leftarrow \text{\alert{Ecuación característica}}\]
+For the equation to have non-trivial solutions:
+ \[ \det (\lambda I - A) = 0 \quad \leftarrow \text{\alert{Characteristic equation}}\]
 \end{frame}
 
 
 \section{Modelo compartamental}
-\label{sec:org52d7782}
+\label{sec:orgbf111f0}
 
-\begin{frame}[label={sec:org11e4423}]{De espacio de estados a función de transferencia}
+\begin{frame}[label={sec:org264662c}]{From state-space model to transfer function}
 \end{frame}
 
-\begin{frame}[label={sec:org92c1e04}]{Modelo compartimental}
+\begin{frame}[label={sec:org6368338}]{The compartment model}
  \small
 \begin{columns}
   \begin{column}{0.5\linewidth}
@@ -173,7 +198,7 @@ Para que la ecuación tenga soluciones no-triviales
 
 
 
-\begin{frame}[label={sec:orgb4da096}]{De espacio de estados a función de transferencia}
+\begin{frame}[label={sec:org5eff5fb}]{From state-space model to transfer function}
 \footnotesize
 
 \begin{align*}
@@ -182,29 +207,29 @@ Para que la ecuación tenga soluciones no-triviales
        y &=  \underbrace{\begin{bmatrix} \textcolor{red!80!black}{1} &  \textcolor{red!80!black}{0}\end{bmatrix}}_C \begin{bmatrix} x_1\\ x_2\end{bmatrix} = Cx
 \end{align*}
 
-Aplicando la transformada de Laplace
+Apply the Laplace transform
 \begin{align*}
 sX - x(0) &= AX + BU\\
 Y &= CX
 \end{align*}
 \pause
-Despejando \(X(s)\)
+Solve for \(X(s)\)
+\pause
 \begin{align*}
 X(s) &= (sI-A)^{-1}x(0) + (sI-A)^{-1}BU(s)\\
 Y(s) &= C\big((sI-A)^{-1}x(0) + (sI-A)^{-1}BU(s)\big)\\
-     & = \underbrace{C(sI-A)^{-1}x(0)}_{\text{\alert{Respuesta transitoria}}} + \underbrace{C(sI-A)^{-1}B}_{\text{\alert{Función de transf.}}}U(s)
+     & = \underbrace{C(sI-A)^{-1}x(0)}_{\text{\alert{Transitory response}}} + \underbrace{C(sI-A)^{-1}B}_{\text{\alert{Transfer fcn.}}}U(s)
 \end{align*}
 \end{frame}
 
 
-\begin{frame}[label={sec:orgfee2d86}]{Transformada de Laplace de una función exponencial}
+\begin{frame}[label={sec:org0939fcb}]{The Laplace transform of the exponential function}
 \[F(s) = \laplace{f(t)} = \int_0^\infty f(t)\mexp{-st}dt\]
-\pause
 \[\laplace{\mexp{pt}} = \int_0^\infty \mexp{pt}\mexp{-st}dt = \int_0^\infty \mexp{-(s-p)t}dt = \frac{1}{s-p} = (s-p)^{-1}, \quad \mathrm{Re}\{s\} > \mathrm{Re}\{p\} \]
 \end{frame}
 
 
-\begin{frame}[label={sec:org2bc4f62}]{Solución homógena de sistemas en espacio de estados}
+\begin{frame}[label={sec:org7ae595b}]{Homogenous solution to linear systems}
 \small
 \begin{align*}
 \dot{x} &= Ax, \qquad x(0) = x_0\\
@@ -214,103 +239,31 @@ Y(s) &= C\big((sI-A)^{-1}x(0) + (sI-A)^{-1}BU(s)\big)\\
 
 \begin{columns}
 \begin{column}{0.5\columnwidth}
-\begin{block}{Solución en dominio de Laplace}
+\begin{block}{Solution in the Laplace-domain}
 \[X(s) = (sI-A)^{-1}x(0)\]
-
-\pause
 \end{block}
 \end{column}
 
+
 \begin{column}{0.5\columnwidth}
-\begin{block}{Solución en dominio de tiempo}
+\begin{block}{Solution in the time-domain}
 \[ x(t) = \Phi(t)x(0) = \mathrm{e}^{At}x(0)\]
 
-Donde  \(\Phi:\,\mathbb{R} \rightarrow \mathbb{R}^{n\times n}\) \[\Phi(t)=\mathrm{e}^{At} = I + tA + \frac{t^2}{2!}A^2 + \frac{t^3}{3!}A^3 + \cdots\] 
+Where  \(\Phi:\,\mathbb{R} \rightarrow \mathbb{R}^{n\times n}\) \[\Phi(t)=\mathrm{e}^{At} = I + tA + \frac{t^2}{2!}A^2 + \frac{t^3}{3!}A^3 + \cdots\] 
 \end{block}
 \end{column}
 \end{columns}
 \end{frame}
 
-\begin{frame}[label={sec:orgb790a26}]{La transformada de Laplace de la exponencial de una matriz}
+\begin{frame}[label={sec:org001d5cc}]{The Laplace-transform of the matrix exponential}
 \[ f(t)=\mathrm{e}^{At} \qquad \overset{\mathcal{L}}{\longleftrightarrow} \qquad F(s) = (sI-A)^{-1} \]
 
 \pause
 
 \[(sI-A)^{-1} = \frac{1}{\det (sI-A)} \, \text{adj}\, (sI-A) \]
 
-\(\det (sI-A)\) es un polinomio en \(s\), llamado \alert{polinomio característico}. Sus raíces, es decir las soluciones de la \alert{ecuación característica}
+\(\det (sI-A)\) is a polynomial in \(s\) called \alert{the characteristic polynomial}. Its roots, i.e. the solution to the  \alert{characteristic equation}
 \[ \det(sI-A) = 0\]
-son los \alert{polos} del sistema y los eigenvalores de \(A\).
-\end{frame}
-
-\begin{frame}[label={sec:org60febdd}]{De espacio de estados a función de transferencia}
-\footnotesize
-
-   \begin{align*}
-     \dot{x} &= \overbrace{\begin{bmatrix} \textcolor{red!80!black}{-\frac{Q+Q_o}{V_1}}  & \textcolor{red!80!black}{\frac{Q}{V_1}} \\
-                 \textcolor{red!80!black}{\frac{Q}{V_2}}  & \textcolor{red!80!black}{-\frac{Q}{V_2}}\end{bmatrix}}^A \begin{bmatrix} {x_1}\\ {x_2}\end{bmatrix}  + \overbrace{\begin{bmatrix} \textcolor{red!80!black}{\frac{1}{V_1}} \\ \textcolor{red!80!black}{0} \end{bmatrix}}^B  u
-= \begin{bmatrix} \textcolor{red!80!black}{a}  & \textcolor{red!80!black}{b} \\
-                 \textcolor{red!80!black}{c}  & \textcolor{red!80!black}{d}\end{bmatrix} x  + \begin{bmatrix} \textcolor{red!80!black}{b_1} \\ \textcolor{red!80!black}{0} \end{bmatrix} u, \qquad
-          y =  \underbrace{\begin{bmatrix} \textcolor{red!80!black}{1} &  \textcolor{red!80!black}{0}\end{bmatrix}}_C x\\
-   X(s) &= (sI-A)^{-1}x(0) + (sI-A)^{-1}BU(s)\\
-   Y(s) &= \underbrace{C(sI-A)^{-1}x(0)}_{\text{\alert{Respuesta transitoria}}} + \underbrace{C(sI-A)^{-1}B}_{\text{\alert{Función de transf.}}}U(s)
-   \end{align*}
-
-\pause
-
-\begin{columns}
-\begin{column}{0.5\columnwidth}
-   \begin{align*}
-    (sI-A)^{-1} &= \begin{bmatrix} s-a & -b\\-c & s-d\end{bmatrix}^{-1}\\
-&=\frac{1}{\det (sI-A)} \, \text{adj}\, (sI-A)\\
-         &= \frac{1}{(s-a)(s-d) - bc} \begin{bmatrix} s-d & b\\c & s-a \end{bmatrix}
-	 \end{align*}
-
-\pause
-\end{column}
-
-\begin{column}{0.5\columnwidth}
-\begin{align*}
-G(s) &= C(sI-A)^{-1}B\\
-     &= \begin{bmatrix} \textcolor{red!80!black}{1} &  \textcolor{red!80!black}{0}\end{bmatrix} \frac{1}{(s-a)(s-d) - bc} \begin{bmatrix} s-d & b\\c & s-a \end{bmatrix} \begin{bmatrix} \textcolor{red!80!black}{b_1} \\ \textcolor{red!80!black}{0} \end{bmatrix}\\
-    &=  \frac{\textcolor{white}{b_1(s-d)}}{\textcolor{white}{(s-a)(s-d) - bc}}
-\end{align*}
-\end{column}
-\end{columns}
-\end{frame}
-
-
-\begin{frame}[label={sec:orgcd6b25b}]{De espacio de estados a función de transferencia}
-\footnotesize
-
-   \begin{align*}
-     \dot{x} &= \overbrace{\begin{bmatrix} \textcolor{red!80!black}{-\frac{Q+Q_o}{V_1}}  & \textcolor{red!80!black}{\frac{Q}{V_1}} \\
-                 \textcolor{red!80!black}{\frac{Q}{V_2}}  & \textcolor{red!80!black}{-\frac{Q}{V_2}}\end{bmatrix}}^A \begin{bmatrix} {x_1}\\ {x_2}\end{bmatrix}  + \overbrace{\begin{bmatrix} \textcolor{red!80!black}{\frac{1}{V_1}} \\ \textcolor{red!80!black}{0} \end{bmatrix}}^B  u
-= \begin{bmatrix} \textcolor{red!80!black}{a}  & \textcolor{red!80!black}{b} \\
-                 \textcolor{red!80!black}{c}  & \textcolor{red!80!black}{d}\end{bmatrix} x  + \begin{bmatrix} \textcolor{red!80!black}{b_1} \\ \textcolor{red!80!black}{0} \end{bmatrix} u, \qquad
-          y =  \underbrace{\begin{bmatrix} \textcolor{red!80!black}{1} &  \textcolor{red!80!black}{0}\end{bmatrix}}_C x\\
-   X(s) &= (sI-A)^{-1}x(0) + (sI-A)^{-1}BU(s)\\
-   Y(s) &= \underbrace{C(sI-A)^{-1}x(0)}_{\text{\alert{Respuesta transitoria}}} + \underbrace{C(sI-A)^{-1}B}_{\text{\alert{Función de transf.}}}U(s)
-   \end{align*}
-
-
-\begin{columns}
-\begin{column}{0.5\columnwidth}
-   \begin{align*}
-    (sI-A)^{-1} &= \begin{bmatrix} s-a & -b\\-c & s-d\end{bmatrix}^{-1}\\
-&=\frac{1}{\det (sI-A)} \, \text{adj}\, (sI-A)\\
-         &= \frac{1}{(s-a)(s-d) - bc} \begin{bmatrix} s-d & b\\c & s-a \end{bmatrix}
-	 \end{align*}
-\end{column}
-
-
-\begin{column}{0.5\columnwidth}
-\begin{align*}
-G(s) &= C(sI-A)^{-1}B\\
-     &= \begin{bmatrix} \textcolor{red!80!black}{1} &  \textcolor{red!80!black}{0}\end{bmatrix} \frac{1}{(s-a)(s-d) - bc} \begin{bmatrix} s-d & b\\c & s-a \end{bmatrix} \begin{bmatrix} \textcolor{red!80!black}{b_1} \\ \textcolor{red!80!black}{0} \end{bmatrix}\\
-    &=  \frac{\textcolor{black}{b_1(s-d)}}{\textcolor{black}{(s-a)(s-d) - bc}}
-\end{align*}
-\end{column}
-\end{columns}
+Are the \alert{poles} of the system and also the \alert{eigenvalues} of \(A\).
 \end{frame}
 \end{document}

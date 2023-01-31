@@ -1,0 +1,81 @@
+\documentclass[]{standalone}
+\usepackage{graphicx}
+
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\pgfplotsset{compat=1.16}
+\usetikzlibrary{calc}
+\usetikzlibrary{decorations.pathmorphing,patterns,decorations.markings}
+
+% Horizontal dashpot with casing fixed to origin and extending to the right 
+% Args
+% 1: dashpot length. Should be the same throughout animation. Resting length is half
+% 2: total length
+\newcommand{\dashpot}[2]{%
+  \pgfmathsetmacro{\restlength}{1.3*(#1)}
+  \pgfmathsetmacro{\rodlength}{0.65*\restlength}
+  \pgfmathsetmacro{\dplhalf}{#1 / 2}
+  \pgfmathsetmacro{\dpattl}{#1 / 6}
+  \pgfmathsetmacro{\dwidth}{1} % in mm
+  \pgfmathsetmacro{\dinnerwidth}{0.8} % in mm
+
+  % Casing
+  \draw (0, 0) -- (\dpattl, 0) -- ++(0, \dwidth mm) -- ++ (#1, 0);
+  \draw (\dpattl, 0) -- ++(0, -\dwidth mm) -- ++ (#1, 0);
+  % Rod
+  \draw (#2, 0) -- ++ (-\rodlength, 0) -- ++(0, \dinnerwidth mm);
+  \draw (#2, 0)  ++ (-\rodlength, 0) -- ++(0, -\dinnerwidth mm);
+}
+
+\begin{document}
+
+\def\masswidth{2}
+\def\massheight{1.6}
+\def\springlen{5}
+
+\begin{tikzpicture}[scale=0.8]
+  \tikzstyle{ground}=[fill,pattern=north east lines,draw=none,minimum width=0.75cm,minimum height=0.3cm]
+  \tikzstyle{damper}=[decoration={markings,  
+    mark connection node=dmp,
+  mark=at position 0.5 with 
+  {
+    \node (dmp) [thick,inner sep=0pt,transform shape,rotate=-90,minimum width=15pt,minimum height=3pt,draw=none] {};
+    \draw [] ($(dmp.north east)+(2pt,0)$) -- (dmp.south east) -- (dmp.south west) -- ($(dmp.north west)+(2pt,0)$);
+    \draw [] ($(dmp.north)+(0,-5pt)$) -- ($(dmp.north)+(0,5pt)$);
+  }
+}, decorate]
+\tikzstyle{spring}=[decorate,decoration={zigzag,pre length=0.2cm,post length=0.2cm,segment length=6}]
+
+  \node (M1) [thick, draw, minimum width=\masswidth cm, minimum height=\massheight cm] {$m$};
+
+  \node (ground) [ground,anchor=north west, xshift = -2cm, yshift=-0.25cm,minimum width=4cm] at (M1.south) {};
+  \draw (ground.north east) -- (ground.north west);
+
+  \node (wall) [ground, rotate=-90, minimum width=3cm,yshift=-3cm] {};
+  \draw (wall.north east) -- (wall.north west);
+
+  \node (wall2) [ground, rotate=-90, minimum width=3cm,yshift=3cm] {};
+  \draw (wall2.south east) -- (wall2.south west);
+
+  \draw[spring] (wall.north)  --  node[below] {} (M1.west);
+  \draw[spring] (wall2.south)  --  node[below] {} (M1.east);
+
+  \coordinate (m1s) at ($(M1.east) + (0,0.5cm)$);
+  \coordinate (m1d) at ($(M1.east) + (0,-0.5cm)$);
+
+  %\draw[spring] (m1s)  --  node[above] {$k_2$} (m2s);
+  %\draw[damper] (m1d)  --  node[below, pos=0.3] {$b$} (m2d);
+
+  \draw [] (M1.south west) ++ (0.2cm,-0.125cm) circle (0.125cm)  (M1.south east) ++ (-0.2cm,-0.125cm) circle (0.125cm);
+
+  \draw[->, thick] (M1.north east) ++(0,-0.2cm) -- ++(1cm, 0) node[very near end, above] {$u(t)$};
+
+  \draw[dashed] (M1.north west) -- ++(0, 14mm);
+
+  \draw[->] (M1.north west) ++ (0, 8mm) -- ++(1cm, 0) node[right] {$z$};
+  
+
+\end{tikzpicture}
+\end{document}

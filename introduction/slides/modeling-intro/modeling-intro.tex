@@ -74,7 +74,7 @@
 \includeonlyframes{%
   Ex0,% Control
   I00,% Control
-  I01,% Control
+%I01,% Control
   A0,% Sistemas mecánicos
   A1,% Modelación es encontrar descripción matematica
   A1E,% Hummer animation. Free-body diagram
@@ -319,12 +319,14 @@
 
 \begin{frame}[label=M3]{Point-mass model}
 
+  \footnotesize 
+  
   Newton's second law: ``The rate of change of the momentum is equal to the sum of forces''
   \[ \frac{d}{dt} (mv) = \sum_i F_i\]
   \begin{center}
     \footnotesize
     %\begin{tikzpicture}[scale=1.2, transform shape]
-    \begin{tikzpicture}[scale=.9]
+    \begin{tikzpicture}[scale=.8]
       \node[anchor=south,] at (1, 0) (hummer) {\includegraphics[width=15 mm]{hummer-ev.png}};
       \node[coordinate] (com) at ($ (hummer.center) + (0.15, 0) $) {};
       \node[coordinate] (wheels) at ($ (hummer.south) + (0, 0.16) $) {};
@@ -340,8 +342,11 @@
     \end{tikzpicture}
   \end{center}
 
-  There is no acceleration in the $Y$ (equilibrium in forces normal to the ground)
+  \pause
+  
+  No acceleration in the $Y$-direction (forces in equilibrium)
   \[ 0 = F_{n} - F_g \quad \Rightarrow \quad F_{n} = F_g = mg\]
+  \pause
   In the $X$-direction:
   \[ m\dot{v} = F_m - F_d\]
 \end{frame}

@@ -31,6 +31,7 @@
    (TeX-add-symbols
     '("mexp" 1)
     '("laplace" 1)
+    "sign"
     "snum"
     "nframes"))
  :latex)

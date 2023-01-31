@@ -67,8 +67,8 @@
 
 
 \author{Kjartan Halvorsen}
-\date{2021-06-07}
-\title{Respuesta de sistemas de primer y segunda orden}
+\date{2022-06-12}
+\title{Response of first- and second-order systems}
 
 % ------------------------------------------------
 % Determine which slides to include
@@ -116,16 +116,19 @@ T21,% Second order systems
 \maketitle
 
 
-\begin{frame}[label=PZ0]{Polos y ceros}
+\begin{frame}[label=PZ0]{Poles and zeros}
 
+  ODE:
+  \[ \frac{d^n}{dt^n}y + a_1\frac{d^{n-1}}{dt^{n-1}}y + \cdots + a_n y = b_0\frac{d^m}{dt^m}u + b_1 \frac{d^m}{dt^m}u + \cdots + b_m u \]
+  Transfer function
   \begin{align*}
-    G(s) &= \frac{B(s)}{A(s)} = \frac{b_0s^m + b_1s^{m-1} + \cdots + b_m }{s^n + a_1s^{n-1} + \cdots + a_n } = \frac{ b_0\overbrace{(s-z_1)(s-z_2)\cdots (s-z_m)}^{\text{\(m\) \alert{ceros}}}}{ \underbrace{(s-p_1)(s-p_2)\cdots(s-p_n)}_{\text{\(n\) \alert{polos}}}}\\
+    G(s) &= \frac{B(s)}{A(s)} = \frac{b_0s^m + b_1s^{m-1} + \cdots + b_m }{s^n + a_1s^{n-1} + \cdots + a_n } = \frac{ b_0\overbrace{(s-z_1)(s-z_2)\cdots (s-z_m)}^{\text{\(m\) \alert{zeros}}}}{ \underbrace{(s-p_1)(s-p_2)\cdots(s-p_n)}_{\text{\(n\) \alert{poles}}}}\\
     &= \frac{c_1}{s-p_1} + \frac{c_2}{s-p_2} + \cdots +\frac{c_n}{s-p_n} 
   \end{align*}
 \end{frame}
 
 
-\begin{frame}[label=T1]{Respuesta de escalón de sistemas de primer orden}
+\begin{frame}[label=T1]{Step-response of a first-order system}
 
   \footnotesize
   
@@ -179,14 +182,14 @@ T21,% Second order systems
   \end{center}
 \end{frame}
   
-\begin{frame}[label=T20]{Respuesta de escalón de sistemas de segundo orden}
+\begin{frame}[label=T20]{Step-response of a second-order system}
 
 {  \tiny
   
   \[\frac{d^2}{dt^2} y + 2\zeta\omega_n \frac{d}{dt} y + \omega_n^2 y = ku \quad \Leftrightarrow \quad Y(s) = \frac{\dot{y}(0) + sy(0)}{s^2 + 2\zeta\omega_n + \omega_n^2} + \frac{k}{s^2 + 2\zeta\omega_n + \omega_n^2} U(s)\]
   \[ y(0) = 0,\, \dot{y}(0)=0, \qquad u(t) = \begin{cases} 1 & t \ge 0\\ 0 & t<0 \end{cases} \quad \overset{\mathcal{L}}{\longleftrightarrow}\quad  U(s) = \frac{1}{s} \]
-  \[ \text{Sobreamortiguado (\(\zeta>1\)):}\; y(t) = k\big( 1 - \frac{a_2 \mexp{-t a_1} }{a_2-a_1}  + \frac{a_1 \mexp{-a_2t} }{\tau_1-\tau_2} \big)\]
-  \[\text{Subamortiguado (\(0 < \zeta < 1\)):}\; y(t) = k\big( 1 - \frac{\mexp{-\zeta\omega_n t}}{\sqrt{1-\zeta^2}}\sin( \omega_n\sqrt{1-\zeta^2}t + \cos^{-1}(\zeta))\big)\] 
+  \[ \text{Overdamped (\(\zeta>1\)):}\quad y(t) = k\Big( 1 - \frac{1}{a_2-a_1}\big(a_2\mexp{-a_1 t} - a_1\mexp{- a_2 t}\big) \Big)\]
+  \[\text{Underdamped (\(0 < \zeta < 1\)):}\quad y(t) = k\big( 1 - \frac{\mexp{-\zeta\omega_n t}}{\sqrt{1-\zeta^2}}\sin( \omega_n\sqrt{1-\zeta^2}t + \cos^{-1}(\zeta))\big)\] 
 }
   \def\snum{60}
   \def\nframes{50}
@@ -294,11 +297,11 @@ T21,% Second order systems
   \end{center}
 \end{frame}
   
-\begin{frame}[label=T21]{Respuesta de escalón de sistemas de segundo orden}
+\begin{frame}[label=T21]{Step-response of a second-order system}
 
 {  \tiny
   
-  \[\text{Subamortiguado (\(0 < \zeta < 1\)):}\; y(t) = k\big( 1 - \frac{\mexp{-\zeta\omega_n t}}{\sqrt{1-\zeta^2}}\sin( \omega_n\sqrt{1-\zeta^2}t + \cos^{-1}(\zeta))\big)\] 
+  \[\text{Under-damped (\(0 < \zeta < 1\)):}\; y(t) = k\big( 1 - \frac{\mexp{-\zeta\omega_n t}}{\sqrt{1-\zeta^2}}\sin( \omega_n\sqrt{1-\zeta^2}t + \cos^{-1}(\zeta))\big)\] 
 }
   \def\snum{60}
   \def\nframes{20}
